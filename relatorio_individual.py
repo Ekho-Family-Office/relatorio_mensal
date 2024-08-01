@@ -1574,7 +1574,7 @@ table_boni_mes_onshore.cell(10, 12).text_frame.paragraphs[0].runs[0].text = roun
 table_boni_mes_onshore.cell(10, 14).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_mes.iloc[:,11].sum(),1,"%",False) #Total
 table_boni_mes_onshore.cell(10, 15).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_mes.iloc[:,12].sum(),1,"%",False) #Alocacao
 table_boni_mes_onshore.cell(10, 16).text_frame.paragraphs[0].runs[0].text = round_if_numeric((carteira_ekho_onshore_mes.iloc[:,11].sum())-(carteira_ekho_onshore_mes.iloc[:,12].sum()),1,"%",False) #Selecao
-table_boni_mes_onshore.cell(10, 5).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_mes.iloc[:,10].sum()/carteira_ekho_onshore_mes.iloc[:,5].sum(),0,"%",False) #Performance Relativa
+table_boni_mes_onshore.cell(10, 5).text_frame.paragraphs[0].runs[0].text = round_if_numeric(100*carteira_ekho_onshore_mes.iloc[:,5].sum()/carteira_ekho_onshore_mes.iloc[:,10].sum(),0,"%",False) #Performance Relativa
 
 
 for row in range(len(carteira_ekho_onshore_ano)):
@@ -1604,7 +1604,7 @@ table_boni_ano_onshore.cell(10, 12).text_frame.paragraphs[0].runs[0].text = roun
 table_boni_ano_onshore.cell(10, 14).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[:,11].sum(),1,"%",False) #Total
 table_boni_ano_onshore.cell(10, 15).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[:,12].sum(),1,"%",False) #Alocacao
 table_boni_ano_onshore.cell(10, 16).text_frame.paragraphs[0].runs[0].text = round_if_numeric((carteira_ekho_onshore_ano.iloc[:,11].sum())-(carteira_ekho_onshore_ano.iloc[:,12].sum()),1,"%",False) #Selecao
-table_boni_ano_onshore.cell(10, 5).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[:,10].sum()/carteira_ekho_onshore_ano.iloc[:,5].sum(),0,"%",False) #Performance Relativa
+table_boni_ano_onshore.cell(10, 5).text_frame.paragraphs[0].runs[0].text = round_if_numeric(100*carteira_ekho_onshore_ano.iloc[:,5].sum()/carteira_ekho_onshore_ano.iloc[:,10].sum(),0,"%",False) #Performance Relativa
 
 # tabela boni Offshore
 slide = prs.slides[25]
@@ -1638,7 +1638,7 @@ table_boni_mes_offshore.cell(12, 12).text_frame.paragraphs[0].runs[0].text = rou
 table_boni_mes_offshore.cell(12, 14).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_offshore_mes.iloc[:,11].sum(),1,"%",False) #Total
 table_boni_mes_offshore.cell(12, 15).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_offshore_mes.iloc[:,12].sum(),1,"%",False) #Alocacao
 table_boni_mes_offshore.cell(12, 16).text_frame.paragraphs[0].runs[0].text = round_if_numeric((carteira_ekho_offshore_mes.iloc[:,11].sum())-(carteira_ekho_offshore_mes.iloc[:,12].sum()),1,"%",False) #Selecao
-table_boni_mes_offshore.cell(12, 5).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_offshore_mes.iloc[:,10].sum()/carteira_ekho_offshore_mes.iloc[:,5].sum(),0,"%",False) #Performance Relativa
+table_boni_mes_offshore.cell(12, 5).text_frame.paragraphs[0].runs[0].text = round_if_numeric(100*carteira_ekho_offshore_mes.iloc[:,5].sum()/carteira_ekho_offshore_mes.iloc[:,10].sum(),0,"%",False) #Performance Relativa
 
 
 for row in range(len(carteira_ekho_offshore_ano)):
@@ -1668,7 +1668,7 @@ table_boni_ano_offshore.cell(12, 12).text_frame.paragraphs[0].runs[0].text = rou
 table_boni_ano_offshore.cell(12, 14).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_offshore_ano.iloc[:,11].sum(),1,"%",False) #Total
 table_boni_ano_offshore.cell(12, 15).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_offshore_ano.iloc[:,12].sum(),1,"%",False) #Alocacao
 table_boni_ano_offshore.cell(12, 16).text_frame.paragraphs[0].runs[0].text = round_if_numeric((carteira_ekho_offshore_ano.iloc[:,11].sum())-(carteira_ekho_offshore_ano.iloc[:,12].sum()),1,"%",False) #Selecao
-table_boni_ano_offshore.cell(12, 5).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_offshore_ano.iloc[:,10].sum()/carteira_ekho_offshore_ano.iloc[:,5].sum(),0,"%",False) #Performance Relativa
+table_boni_ano_offshore.cell(12, 5).text_frame.paragraphs[0].runs[0].text = round_if_numeric(100*carteira_ekho_offshore_ano.iloc[:,5].sum()/carteira_ekho_offshore_ano.iloc[:,10].sum(),0,"%",False) #Performance Relativa
 
 
 # slide 17 - Historico e Resumo por Conta (offshore)

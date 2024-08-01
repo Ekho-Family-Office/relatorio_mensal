@@ -29,7 +29,7 @@ import traceback
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
-data_fim = datetime(2024, 6, 28)  # TODO MUDAR
+data_fim = datetime(2024, 7, 25)  # TODO MUDAR
 folder = "JUN24"  # TODO MUDAR
 username = "ekho.fo"
 password = "EKH@fo2024"
@@ -527,7 +527,7 @@ def get_cmd_data(portifolio, region="onshore", data_ini="02012000"):
                     df_RetornosNominais.at[index, col] = value * 100
 
     json_e22 = CMD_request("ExtratoCarteira022", portifolio, data_inicio_carteira_str,
-                           data_fim_str, first_workday_str, "1")
+                           data_fim_str, first_workday_str, "1", extra="%26cot_tir_ativo%3Dambos")
     df_RetornoNominalAtivo = json_to_df(json_e22, "tab4")
     for i in range(len(df_RetornoNominalAtivo)):
         for j in range(len(df_RetornoNominalAtivo.iloc[i])):
@@ -537,7 +537,7 @@ def get_cmd_data(portifolio, region="onshore", data_ini="02012000"):
                 pass
 
     json_e22l6 = CMD_request(
-        "ExtratoCarteira022", portifolio, data_inicio_carteira_str, data_fim_str, "mes_atual", "6", "%26data_ini3%3Dano_atual")
+        "ExtratoCarteira022", portifolio, data_inicio_carteira_str, data_fim_str, "mes_atual", "6", "%26data_ini3%3Dano_atual%26cot_tir_ativo%3Dambos")
     df_PerfAttr = json_to_df(json_e22l6, "tab2")
 
     df_PerfAttr.iloc[:, :] = df_PerfAttr.iloc[:, :].applymap(convert_to_float)

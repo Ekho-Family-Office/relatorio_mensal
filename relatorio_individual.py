@@ -536,7 +536,7 @@ def get_cmd_data(portifolio, region="onshore", data_ini="02012000"):
                     df_RetornosNominais.at[index, col] = value * 100
 
     json_e22 = CMD_request("ExtratoCarteira022", portifolio, data_inicio_carteira_str,
-                           data_fim_str, first_workday_str, "1")
+                           data_fim_str, first_workday_str, "1", extra="%26cot_tir_ativo%3Dambos")
     df_RetornoNominalAtivo = json_to_df(json_e22, "tab4")
     for i in range(len(df_RetornoNominalAtivo)):
         for j in range(len(df_RetornoNominalAtivo.iloc[i])):

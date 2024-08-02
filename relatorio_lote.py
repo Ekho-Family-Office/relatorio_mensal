@@ -39,26 +39,6 @@ password = "EKH@fo2024"
 colors = ["1178ce", "ce6611", "002d74", "5b6670", "c2d500", "222b32", "c1c5c8"]
 
 
-def pptx_to_pdf(pptx_folder, pdf_folder):
-    # Inicia o PowerPoint
-    powerpoint = comtypes.client.CreateObject("Powerpoint.Application")
-    powerpoint.Visible = 1
-
-    for filename in os.listdir(pptx_folder):
-        if filename.endswith(".pptx"):
-            file_path = os.path.join(pptx_folder, filename)
-            pdf_path = os.path.join(
-                pdf_folder, filename.replace(".pptx", ".pdf"))
-
-            # Abre a apresentação
-            presentation = powerpoint.Presentations.Open(
-                file_path, WithWindow=False)
-
-            # Salva como PDF
-            presentation.SaveAs(pdf_path, 32)  # 32 representa o formato PDF
-            presentation.Close()
-
-    powerpoint.Quit()
 
 
 def json_to_df(json, table):
@@ -2436,11 +2416,3 @@ for client in on_off_errors:
 print("\n\nCLIENTES ONSHORE COM ERRO:")
 for client in onshore_errors:
     print(client)
-
-# for df_row in range(30):
-#     print(codigos_clientes.iloc[df_row])
-#     carteira = codigos_clientes.iloc[df_row]["COM DINHEIRO"]
-#     nome = codigos_clientes.iloc[df_row]["CLIENTE"]
-#     parceiro = codigos_clientes.iloc[df_row]["PARCEIRO"]
-#     # PPTtoPDF(f"Relatórios/2024_01/ppt/{nome}_{carteira}_{parceiro}.pptx",
-#     #          f"Relatórios/2024_01/pdf/{nome}_{carteira}_{parceiro}.pdf")

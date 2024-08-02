@@ -16,6 +16,7 @@ import comtypes.client
 import os
 import numpy as np
 import locale
+
 import yfinance as yahooFinance
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta

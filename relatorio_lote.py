@@ -29,7 +29,7 @@ import traceback
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
-data_fim = datetime(2024, 7, 25)  # TODO MUDAR
+data_fim = datetime(2024, 7, 30)  # TODO MUDAR
 folder = "JUN24"  # TODO MUDAR
 username = "ekho.fo"
 password = "EKH@fo2024"
@@ -1431,11 +1431,11 @@ for client_name in clientes_on_off["name"].unique():
             for row in range(len(carteira_ekho_offshore_mes)):
                 table_boni_mes_offshore.cell(3+row, 0).text_frame.paragraphs[0].runs[0].text = carteira_ekho_offshore_mes.iloc[row,0] #Classe
                 table_boni_mes_offshore.cell(3+row, 2).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_offshore_mes.iloc[row,1],0,"%",False) #% Alocado
-                table_boni_mes_offshore.cell(3+row, 3).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_offshore_mes.iloc[row,2],0,"R$ ",True) #Saldo Bruto
+                table_boni_mes_offshore.cell(3+row, 3).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_offshore_mes.iloc[row,2],0,"$ ",True) #Saldo Bruto
                 table_boni_mes_offshore.cell(3+row, 4).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_offshore_mes.iloc[row,3],1,"%",False) #Performance
                 table_boni_mes_offshore.cell(3+row, 5).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_offshore_mes.iloc[row,4],0,"%",False) #Performance Relativa
                 table_boni_mes_offshore.cell(3+row, 6).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_offshore_mes.iloc[row,5],1,"%",False) #Contribuiçao Bruta (%)
-                table_boni_mes_offshore.cell(3+row, 7).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_offshore_mes.iloc[row,6],0,"R$ ",True) #Contribuiçao Bruta (Dinheiro)
+                table_boni_mes_offshore.cell(3+row, 7).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_offshore_mes.iloc[row,6],0,"$ ",True) #Contribuiçao Bruta (Dinheiro)
                 table_boni_mes_offshore.cell(3+row, 9).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_offshore_mes.iloc[row,7],0,"%",False) #Peso PL
                 table_boni_mes_offshore.cell(3+row, 10).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_offshore_mes.iloc[row,8],1,"%",False) #Performance Benchmark
                 table_boni_mes_offshore.cell(3+row, 11).text_frame.paragraphs[0].runs[0].text = carteira_ekho_offshore_mes.iloc[row,9] #Benchmark

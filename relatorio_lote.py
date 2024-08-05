@@ -29,8 +29,8 @@ import traceback
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
-data_fim = datetime(2024, 7, 30)  # TODO MUDAR
-folder = "JUN24"  # TODO MUDAR
+data_fim = datetime(2024, 6, 28)  # TODO MUDAR
+folder = "JUL24"  # TODO MUDAR
 username = "ekho.fo"
 password = "EKH@fo2024"
 
@@ -56,10 +56,10 @@ def json_to_df(json, table):
     return df_table
 
 
-def CMD_request(extract, portifolio, data_ini, data_fim, data_ini2, layout="1", extra="", benchmarks="CDI%2BIBOV%2BANBIMA_IMAB", mes_benchs="CDI%2Bpercent_CDI", ret2="ativo%2Bmes_atual%2Bano_atual%2B03m%2B06m%2B12m%2B24m%2B36m%2Bperiodo_compra%2Bdata_aplicacao%2Bpercent_SB", ret3="ativo%2Bpercent_SB%2Bmes_atual%2Bano_atual%2B12_m%2Bano_anterior%2Bperiodo_compra", username=username, password=password):
+def CMD_request(extract, portifolio, data_ini, data_fim, data_ini2, layout="1", extra="", benchmarks="CDI%2BIBOV%2BANBIMA_IMAB", mes_benchs="CDI%2Bpercent_CDI", ret2="ativo%2Bmes_atual%2Bano_atual%2B03m%2B06m%2B12m%2B24m%2B36m%2Bperiodo_compra%2Bdata_aplicacao%2Bpercent_SB", ret3="ativo%2Bpercent_SB%2Bmes_atual%2Bano_atual%2B12_m%2Bano_anterior%2Bperiodo_compra",classe="MV%28class_ekho%29", username=username, password=password):
     url = "https://www.comdinheiro.com.br/Clientes/API/EndPoint001.php"
     querystring = {"code": "import_data"}
-    payload = f"username={username}&password={password}&URL={extract}.php%3Fnome_portfolio%3D{portifolio}%26data_ini%3D{data_ini}%26data_fim%3D{data_fim}%26data_ini2%3D{data_ini2}{extra}%26layout%3D{layout}%26benchmarks%3D{benchmarks}%26mes_benchs%3D{mes_benchs}%26ret2%3D{ret2}%26ret3%3D{ret3}%26classe%3DMV%28class_ekho%29%26classe2%3DIF&format=json3"
+    payload = f"username={username}&password={password}&URL={extract}.php%3Fnome_portfolio%3D{portifolio}%26data_ini%3D{data_ini}%26data_fim%3D{data_fim}%26data_ini2%3D{data_ini2}{extra}%26layout%3D{layout}%26benchmarks%3D{benchmarks}%26mes_benchs%3D{mes_benchs}%26ret2%3D{ret2}%26ret3%3D{ret3}%26classe%3D{classe}%26classe2%3DIF&format=json3"
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
     response = requests.request(
         "POST", url, data=payload, headers=headers, params=querystring)
@@ -176,6 +176,8 @@ clientes_on_off = pd.read_excel(
     open('Suporte_Relatorio.xlsx', 'rb'), sheet_name='clients_on_off')
 clientes_onshore = pd.read_excel(
     open('Suporte_Relatorio.xlsx', 'rb'), sheet_name='clients_onshore')
+instituicao_financeira = pd.read_excel(
+    open('Suporte_Relatorio.xlsx', 'rb'), sheet_name='instituicao_financeira')
 
 first_workday_str = first_workday(data_fim).strftime("%d%m%Y")
 previous_month_last_workday_str = previous_month_last_workday(data_fim).strftime(
@@ -251,10 +253,10 @@ def remove_row(table, row):
 def fill_asset_table(start_slide, dict_df, max_rows_len=18):
     slide_counter = start_slide
     table_idx_list = []
-    number_of_columns = 11
+    number_of_columns = 13
 
     for index in range(len(dict_df)):
-        # print(f"index: {index}; class: {getList(dict_df)[index]}")
+        print(f"index: {index}; class: {getList(dict_df)[index]}")
         previous_table_rows_len = 0
         next_table = False
 
@@ -309,7 +311,7 @@ def fill_asset_table(start_slide, dict_df, max_rows_len=18):
                 for idx, elem in enumerate(table_idx_list):
                     shape = [shape for shape in slide.shapes if shape.name ==
                              f"rentabilidade_ativo_{elem}"][0]
-                    shape.left = 1484154
+                    shape.left = 997200
                     if idx == 0:
                         shape.top = 932400
                     else:
@@ -339,7 +341,7 @@ def fill_asset_table(start_slide, dict_df, max_rows_len=18):
         # print(f"elem: {elem}")
         shape = [shape for shape in slide.shapes if shape.name ==
                  f"rentabilidade_ativo_{elem}"][0]
-        shape.left = 1484154
+        shape.left = 997200
         if idx == 0:
             shape.top = 932400
         else:
@@ -396,6 +398,41 @@ def tax_diff(taxa1, taxa2):
     taxa2 = taxa2/100 if not (is_string) else 0
     diff = 100*(((1+taxa1)/(1+taxa2))-1) if not (is_string) else "-"
     return diff
+
+
+
+def split_dfs(df, separators):
+    df_list = []
+    current_df = pd.DataFrame(columns=df.columns)
+    separators_found = set()
+
+    for index, row in df.iterrows():
+        asset = row['Ativo']
+        if asset in separators and asset not in separators_found:
+            if not current_df.empty:
+                df_list.append(current_df)
+                current_df = pd.DataFrame(columns=df.columns)
+            separators_found.add(asset)
+
+        current_df = pd.concat([current_df, pd.DataFrame([row])], ignore_index=True)
+
+    if not current_df.empty:
+        df_list.append(current_df)
+
+    return df_list
+
+
+def tabela_ativos(x,column,onshore=True):
+    try:
+        if onshore:
+            mask = cmd_onshore["if_liquidez"]["Ativo"] == x
+            return cmd_onshore["if_liquidez"].loc[mask, column].reset_index(drop=True).iloc[0]
+        else:
+            mask = cmd_offshore["if_liquidez"]["Ativo"] == x
+            return cmd_offshore["if_liquidez"].loc[mask, column].reset_index(drop=True).iloc[0]
+    except:
+        return "-"
+
 
 
 def get_cmd_data(portifolio, region="onshore", data_ini="02012000"):
@@ -536,6 +573,25 @@ def get_cmd_data(portifolio, region="onshore", data_ini="02012000"):
     json_e7 = CMD_request("ExtratoCarteira007", portifolio, data_inicio_carteira_str,
                           data_fim_str, first_workday_str, "1")
     df_Volatilidade = json_to_df(json_e7, "tab3")
+    
+    
+    
+    json_e21l2_IF= CMD_request("ExtratoCarteira021", portifolio, data_inicio_carteira_str,
+                          data_fim_str, first_workday_str, "2", classe="IF")
+    df_IF= json_to_df(json_e21l2_IF, "tab9")
+    
+    ativos_IF = split_dfs(df_IF,instituicao_financeira["instituicao_financeira"].tolist())
+    for df in ativos_IF:
+        apelido = instituicao_financeira[instituicao_financeira["instituicao_financeira"] == df.iloc[0,1]]["apelido"].reset_index(drop=True)
+        apelido = apelido[0]
+        df["IF"] = apelido
+        
+    combined_ativos_IF = pd.concat(ativos_IF, ignore_index=True)
+    
+    combined_ativos_IF["Liquidez"]=combined_ativos_IF["Liquidez"].apply(
+        lambda x: "-" if x=="" or x=="(vide regulamento)" else x)
+    
+    
 
     ipca_desde_ini = cmd_historico_acum(
         username, password, ticker="IBGE_IPCA15", data_ini=data_inicio_carteira_str, data_fim=data_fim_str)
@@ -555,7 +611,8 @@ def get_cmd_data(portifolio, region="onshore", data_ini="02012000"):
                 "df_ClasseDeAtivos": df_ClasseDeAtivos,
                 "df_Volatilidade": df_Volatilidade,
                 "ipca_desde_ini": ipca_desde_ini,
-                "cpi_desde_ini": cpi_desde_ini}
+                "cpi_desde_ini": cpi_desde_ini,
+                "if_liquidez":combined_ativos_IF}
 
     return cmd_data
 
@@ -1014,6 +1071,11 @@ for client_name in clientes_on_off["name"].unique():
                 except:
                     print(f"     Error on ONSHORE-{portifolio_onshore} class: {classe}")
                     del final_onshore["dfs_class"][classe]
+            
+    
+            for df in final_onshore["dfs_class"]:
+                final_onshore["dfs_class"][df]["Liquidez"] = final_onshore["dfs_class"][df]["Ativo"].apply(lambda x: tabela_ativos(x,"Liquidez"))
+                final_onshore["dfs_class"][df]["IF"] = final_onshore["dfs_class"][df]["Ativo"].apply(lambda x: tabela_ativos(x,"IF"))
 
             ############ OFFSHORE ###########################
             # SLIDE 7
@@ -1269,6 +1331,11 @@ for client_name in clientes_on_off["name"].unique():
                 except:
                     print(f"     Error on OFFSHORE-{portifolio_offshore} class: {classe}")
                     del final_offshore["dfs_class"][classe]
+                    
+            for df in final_offshore["dfs_class"]:
+                final_offshore["dfs_class"][df]["Liquidez"] = final_offshore["dfs_class"][df]["Ativo"].apply(lambda x: tabela_ativos(x,"Liquidez",onshore=False))
+                final_offshore["dfs_class"][df]["IF"] = final_offshore["dfs_class"][df]["Ativo"].apply(lambda x: tabela_ativos(x,"IF",onshore=False))
+
 
               ######################## PYTHON PPTX #########################
 
@@ -2125,6 +2192,11 @@ for client_name in clientes_onshore["name"].unique():
                 except:
                     print(classe)
                     del final_onshore["dfs_class"][classe]
+                
+            for df in final_onshore["dfs_class"]:
+                final_onshore["dfs_class"][df]["Liquidez"] = final_onshore["dfs_class"][df]["Ativo"].apply(lambda x: tabela_ativos(x,"Liquidez"))
+                final_onshore["dfs_class"][df]["IF"] = final_onshore["dfs_class"][df]["Ativo"].apply(lambda x: tabela_ativos(x,"IF"))
+
 
          ######################## PYTHON PPTX #########################
 

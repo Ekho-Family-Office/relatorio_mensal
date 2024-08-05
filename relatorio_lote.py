@@ -30,7 +30,7 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
 data_fim = datetime(2024, 6, 28)  # TODO MUDAR
-folder = "JUN24"  # TODO MUDAR
+folder = "JUL24"  # TODO MUDAR
 username = "ekho.fo"
 password = "EKH@fo2024"
 
@@ -1062,7 +1062,8 @@ for client_name in clientes_on_off["name"].unique():
             
 
             for df in final_onshore["dfs_class"]:
-                final_onshore["dfs_class"][df]["Liquidez"].apply(lambda x: cmd_onshore["if_liquidez"]
+                final_onshore["dfs_class"][df]["Liquidez"] = final_onshore["dfs_class"][df]["Ativo"].apply(lambda x: cmd_onshore["if_liquidez"][cmd_onshore["if_liquidez"]["Ativo"]==x]["Liquidez"])
+                final_onshore["dfs_class"][df]["IF"] = final_onshore["dfs_class"][df]["Ativo"].apply(lambda x: cmd_onshore["if_liquidez"][cmd_onshore["if_liquidez"]["Ativo"]==x]["IF"])
 
             ############ OFFSHORE ###########################
             # SLIDE 7

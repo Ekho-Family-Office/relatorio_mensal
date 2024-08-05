@@ -31,18 +31,18 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
 data_fim = datetime(2024, 6, 28)  # TODO MUDAR
-folder = "JUNHO24"  # TODO MUDAR
+folder = "JUL24"  # TODO MUDAR
 username = "ekho.fo"
 password = "EKH@fo2024"
 
 
-portifolio_onshore = "1002"
-data_ini_onshore = "23102023"
+portifolio_onshore = "1028"
+data_ini_onshore = "30062023"
 
-portifolio_offshore = "2000"
-data_ini_offshore = "29112023"
+portifolio_offshore = "2018"
+data_ini_offshore = "30062023"
 
-client_name = "CARLOS EDUARDO DE ALMEIDA MOYSES_FexExplodido"
+client_name = "MAURICIO DORNELLAS TABBAL CHAMATI"
 
 
 # Azul Claro, Laranja, Azul Escuro, Cinza, Verde, Preto, Branco
@@ -283,7 +283,7 @@ def remove_row(table, row):
 def fill_asset_table(start_slide, dict_df, max_rows_len=18):
     slide_counter = start_slide
     table_idx_list = []
-    number_of_columns = 11
+    number_of_columns = 13
 
     for index in range(len(dict_df)):
         print(f"index: {index}; class: {getList(dict_df)[index]}")
@@ -341,7 +341,7 @@ def fill_asset_table(start_slide, dict_df, max_rows_len=18):
                 for idx, elem in enumerate(table_idx_list):
                     shape = [shape for shape in slide.shapes if shape.name ==
                              f"rentabilidade_ativo_{elem}"][0]
-                    shape.left = 1484154
+                    shape.left = 997200
                     if idx == 0:
                         shape.top = 932400
                     else:
@@ -371,7 +371,7 @@ def fill_asset_table(start_slide, dict_df, max_rows_len=18):
         # print(f"elem: {elem}")
         shape = [shape for shape in slide.shapes if shape.name ==
                  f"rentabilidade_ativo_{elem}"][0]
-        shape.left = 1484154
+        shape.left = 997200
         if idx == 0:
             shape.top = 932400
         else:
@@ -448,6 +448,17 @@ def split_dfs(df, separators):
         df_list.append(current_df)
 
     return df_list
+
+def tabela_ativos(x,column,onshore=True):
+    try:
+        if onshore:
+            mask = cmd_onshore["if_liquidez"]["Ativo"] == x
+            return cmd_onshore["if_liquidez"].loc[mask, column].reset_index(drop=True).iloc[0]
+        else:
+            mask = cmd_offshore["if_liquidez"]["Ativo"] == x
+            return cmd_offshore["if_liquidez"].loc[mask, column].reset_index(drop=True).iloc[0]
+    except:
+        return "-"
 
 
 
@@ -1068,6 +1079,13 @@ for classe in list(final_onshore["dfs_class"]):
     except:
         print(f"     Error on ONSHORE class: {classe}")
         del final_onshore["dfs_class"][classe]
+        
+for df in final_onshore["dfs_class"]:
+    final_onshore["dfs_class"][df]["Liquidez"] = final_onshore["dfs_class"][df]["Ativo"].apply(lambda x: tabela_ativos(x,"Liquidez"))
+    final_onshore["dfs_class"][df]["IF"] = final_onshore["dfs_class"][df]["Ativo"].apply(lambda x: tabela_ativos(x,"IF"))
+
+
+
 
 ############ OFFSHORE ###########################
 # SLIDE 7
@@ -1322,6 +1340,11 @@ for classe in list(final_offshore["dfs_class"]):
     except:
         print(f"     Error on OFFSHORE class: {classe}")
         del final_offshore["dfs_class"][classe]
+        
+    
+for df in final_offshore["dfs_class"]:
+    final_offshore["dfs_class"][df]["Liquidez"] = final_offshore["dfs_class"][df]["Ativo"].apply(lambda x: tabela_ativos(x,"Liquidez",onshore=False))
+    final_offshore["dfs_class"][df]["IF"] = final_offshore["dfs_class"][df]["Ativo"].apply(lambda x: tabela_ativos(x,"IF",onshore=False))
 
   ######################## PYTHON PPTX #########################
 

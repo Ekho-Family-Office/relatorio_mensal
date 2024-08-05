@@ -86,10 +86,10 @@ def json_to_df(json, table):
     return df_table
 
 
-def CMD_request(extract, portifolio, data_ini, data_fim, data_ini2, layout="1", extra="", benchmarks="CDI%2BIBOV%2BANBIMA_IMAB", mes_benchs="CDI%2Bpercent_CDI", ret2="ativo%2Bmes_atual%2Bano_atual%2B03m%2B06m%2B12m%2B24m%2B36m%2Bperiodo_compra%2Bdata_aplicacao%2Bpercent_SB", ret3="ativo%2Bpercent_SB%2Bmes_atual%2Bano_atual%2B12_m%2Bano_anterior%2Bperiodo_compra", username=username, password=password):
+def CMD_request(extract, portifolio, data_ini, data_fim, data_ini2, layout="1", extra="", benchmarks="CDI%2BIBOV%2BANBIMA_IMAB", mes_benchs="CDI%2Bpercent_CDI", ret2="ativo%2Bmes_atual%2Bano_atual%2B03m%2B06m%2B12m%2B24m%2B36m%2Bperiodo_compra%2Bdata_aplicacao%2Bpercent_SB", ret3="ativo%2Bpercent_SB%2Bmes_atual%2Bano_atual%2B12_m%2Bano_anterior%2Bperiodo_compra",classe="MV%28class_ekho%29", username=username, password=password):
     url = "https://www.comdinheiro.com.br/Clientes/API/EndPoint001.php"
     querystring = {"code": "import_data"}
-    payload = f"username={username}&password={password}&URL={extract}.php%3Fnome_portfolio%3D{portifolio}%26data_ini%3D{data_ini}%26data_fim%3D{data_fim}%26data_ini2%3D{data_ini2}{extra}%26layout%3D{layout}%26benchmarks%3D{benchmarks}%26mes_benchs%3D{mes_benchs}%26ret2%3D{ret2}%26ret3%3D{ret3}%26classe%3DMV%28class_ekho%29%26classe2%3DIF&format=json3"
+    payload = f"username={username}&password={password}&URL={extract}.php%3Fnome_portfolio%3D{portifolio}%26data_ini%3D{data_ini}%26data_fim%3D{data_fim}%26data_ini2%3D{data_ini2}{extra}%26layout%3D{layout}%26benchmarks%3D{benchmarks}%26mes_benchs%3D{mes_benchs}%26ret2%3D{ret2}%26ret3%3D{ret3}%26classe%3D{classe}%26classe2%3DIF&format=json3"
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
     response = requests.request(
         "POST", url, data=payload, headers=headers, params=querystring)
@@ -206,6 +206,8 @@ clientes_on_off = pd.read_excel(
     open('Suporte_Relatorio.xlsx', 'rb'), sheet_name='clients_on_off')
 clientes_onshore = pd.read_excel(
     open('Suporte_Relatorio.xlsx', 'rb'), sheet_name='clients_onshore')
+instituicao_financeira = pd.read_excel(
+    open('Suporte_Relatorio.xlsx', 'rb'), sheet_name='instituicao_financeira')
 
 first_workday_str = first_workday(data_fim).strftime("%d%m%Y")
 previous_month_last_workday_str = previous_month_last_workday(data_fim).strftime(
@@ -427,6 +429,27 @@ def tax_diff(taxa1, taxa2):
     diff = 100*(((1+taxa1)/(1+taxa2))-1) if not (is_string) else "-"
     return diff
 
+def split_dfs(df, separators):
+    df_list = []
+    current_df = pd.DataFrame(columns=df.columns)
+    separators_found = set()
+
+    for index, row in df.iterrows():
+        asset = row['Ativo']
+        if asset in separators and asset not in separators_found:
+            if not current_df.empty:
+                df_list.append(current_df)
+                current_df = pd.DataFrame(columns=df.columns)
+            separators_found.add(asset)
+
+        current_df = pd.concat([current_df, pd.DataFrame([row])], ignore_index=True)
+
+    if not current_df.empty:
+        df_list.append(current_df)
+
+    return df_list
+
+
 
 def get_cmd_data(portifolio, region="onshore", data_ini="02012000"):
     # PL
@@ -547,7 +570,7 @@ def get_cmd_data(portifolio, region="onshore", data_ini="02012000"):
                 pass
 
     json_e22l6 = CMD_request(
-        "ExtratoCarteira022", portifolio, data_inicio_carteira_str, data_fim_str, "mes_atual", "6", "%26data_ini3%3Dano_atual")
+        "ExtratoCarteira022", portifolio, data_inicio_carteira_str, data_fim_str, "mes_atual", "6", "%26data_ini3%3Dano_atual%26cot_tir_ativo%3Dambos")
     df_PerfAttr = json_to_df(json_e22l6, "tab2")
 
     df_PerfAttr.iloc[:, :] = df_PerfAttr.iloc[:, :].applymap(convert_to_float)
@@ -566,13 +589,31 @@ def get_cmd_data(portifolio, region="onshore", data_ini="02012000"):
     json_e7 = CMD_request("ExtratoCarteira007", portifolio, data_inicio_carteira_str,
                           data_fim_str, first_workday_str, "1")
     df_Volatilidade = json_to_df(json_e7, "tab3")
+    
+    
+    
+    json_e21l2_IF= CMD_request("ExtratoCarteira021", portifolio, data_inicio_carteira_str,
+                          data_fim_str, first_workday_str, "2", classe="IF")
+    df_IF= json_to_df(json_e21l2_IF, "tab9")
+    
+    ativos_IF = split_dfs(df_IF,instituicao_financeira["instituicao_financeira"].tolist())
+    for df in ativos_IF:
+        apelido = instituicao_financeira[instituicao_financeira["instituicao_financeira"] == df.iloc[0,1]]["apelido"].reset_index(drop=True)
+        apelido = apelido[0]
+        df["IF"] = apelido
+        
+    combined_ativos_IF = pd.concat(ativos_IF, ignore_index=True)
+    
+    combined_ativos_IF["Liquidez"]=combined_ativos_IF["Liquidez"].apply(
+        lambda x: "-" if x=="" or x=="(vide regulamento)" else x)
+    
+    
 
     ipca_desde_ini = cmd_historico_acum(
         username, password, ticker="IBGE_IPCA15", data_ini=data_inicio_carteira_str, data_fim=data_fim_str)
 
     cpi_desde_ini = cmd_historico_acum(
         username, password, ticker="US:BLS_CPI_forecast", data_ini=data_inicio_carteira_str, data_fim=data_fim_str)
-    
 
     cmd_data = {"data_inicio_carteira": data_inicio_carteira,
                 "df_PL": df_PL,
@@ -586,9 +627,11 @@ def get_cmd_data(portifolio, region="onshore", data_ini="02012000"):
                 "df_ClasseDeAtivos": df_ClasseDeAtivos,
                 "df_Volatilidade": df_Volatilidade,
                 "ipca_desde_ini": ipca_desde_ini,
-                "cpi_desde_ini": cpi_desde_ini}
+                "cpi_desde_ini": cpi_desde_ini,
+                "if_liquidez":combined_ativos_IF}
 
     return cmd_data
+
 
 
 def perf_attr_fill(order_list, df_PerfAttr, slide):

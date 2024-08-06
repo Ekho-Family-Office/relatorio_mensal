@@ -2320,6 +2320,36 @@ for client_name in clientes_onshore["name"].unique():
             table_boni_mes_onshore.cell(10, 16).text_frame.paragraphs[0].runs[0].text = round_if_numeric((carteira_ekho_onshore_mes.iloc[:,11].sum())-(carteira_ekho_onshore_mes.iloc[:,12].sum()),1,"%",False) #Selecao
             table_boni_mes_onshore.cell(10, 5).text_frame.paragraphs[0].runs[0].text = round_if_numeric(100*carteira_ekho_onshore_mes.iloc[:,5].sum()/carteira_ekho_onshore_mes.iloc[:,10].sum(),0,"%",False) #Performance Relativa
             
+            
+            for row in range(len(carteira_ekho_onshore_ano)):
+                table_boni_ano_onshore.cell(3+row, 0).text_frame.paragraphs[0].runs[0].text = carteira_ekho_onshore_ano.iloc[row,0] #Classe
+                table_boni_ano_onshore.cell(3+row, 2).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[row,1],0,"%",False) #% Alocado
+                table_boni_ano_onshore.cell(3+row, 3).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[row,2],0,"R$ ",True) #Saldo Bruto
+                table_boni_ano_onshore.cell(3+row, 4).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[row,3],1,"%",False) #Performance
+                table_boni_ano_onshore.cell(3+row, 5).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[row,4],0,"%",False) #Performance Relativa
+                table_boni_ano_onshore.cell(3+row, 6).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[row,5],1,"%",False) #Contribuiçao Bruta (%)
+                table_boni_ano_onshore.cell(3+row, 7).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[row,6],0,"R$ ",True) #Contribuiçao Bruta (Dinheiro)
+                table_boni_ano_onshore.cell(3+row, 9).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[row,7],0,"%",False) #Peso PL
+                table_boni_ano_onshore.cell(3+row, 10).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[row,8],1,"%",False) #Performance Benchmark
+                table_boni_ano_onshore.cell(3+row, 11).text_frame.paragraphs[0].runs[0].text = carteira_ekho_onshore_ano.iloc[row,9] #Benchmark
+                table_boni_ano_onshore.cell(3+row, 12).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[row,10],1,"%",False) #Contribuicao
+                table_boni_ano_onshore.cell(3+row, 14).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[row,11],1,"%",False) #Total
+                table_boni_ano_onshore.cell(3+row, 15).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[row,12],1,"%",False) #Alocacao
+                table_boni_ano_onshore.cell(3+row, 16).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[row,13],1,"%",False) #Selecao
+                
+            table_boni_ano_onshore.cell(10, 2).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[:,1].sum(),0,"%",False) # % Alocado
+            table_boni_ano_onshore.cell(10, 3).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[:,2].sum(),0,"R$ ",True) #Saldo Bruto
+            table_boni_ano_onshore.cell(10, 4).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[:,5].sum(),1,"%",False) #Performance
+            table_boni_ano_onshore.cell(10, 6).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[:,5].sum(),1,"%",False) #Contribuiçao Bruta (%)
+            table_boni_ano_onshore.cell(10, 7).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[:,6].sum(),0,"R$ ",True) #Contribuiçao Bruta (Dinheiro)
+            table_boni_ano_onshore.cell(10, 9).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[:,7].sum(),0,"%",False) #Peso PL
+            table_boni_ano_onshore.cell(10, 10).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[:,10].sum(),1,"%",False) #Performance Benchmark
+            table_boni_ano_onshore.cell(10, 12).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[:,10].sum(),1,"%",False) #Contribuicao
+            table_boni_ano_onshore.cell(10, 14).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[:,11].sum(),1,"%",False) #Total
+            table_boni_ano_onshore.cell(10, 15).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_ano.iloc[:,12].sum(),1,"%",False) #Alocacao
+            table_boni_ano_onshore.cell(10, 16).text_frame.paragraphs[0].runs[0].text = round_if_numeric((carteira_ekho_onshore_ano.iloc[:,11].sum())-(carteira_ekho_onshore_ano.iloc[:,12].sum()),1,"%",False) #Selecao
+            table_boni_ano_onshore.cell(10, 5).text_frame.paragraphs[0].runs[0].text = round_if_numeric(100*carteira_ekho_onshore_ano.iloc[:,5].sum()/carteira_ekho_onshore_ano.iloc[:,10].sum(),0,"%",False) #Performance Relativa
+       
             # slide 2 - Historico e Resumo por Conta (onshore)
             slide = prs.slides[4]  # Acessa o slide desejado
             table_retorno_consolidado = [

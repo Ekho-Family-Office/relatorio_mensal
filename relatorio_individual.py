@@ -30,19 +30,19 @@ from pptx.enum.text import PP_ALIGN
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
-data_fim = datetime(2024, 6, 28)  # TODO MUDAR
+data_fim = datetime(2024, 7, 31)  # TODO MUDAR
 folder = "JUL24"  # TODO MUDAR
 username = "ekho.fo"
 password = "EKH@fo2024"
 
 
-portifolio_onshore = "1028"
-data_ini_onshore = "30062023"
+portifolio_onshore = "1010"
+data_ini_onshore = "22032024"
 
 portifolio_offshore = "2018"
 data_ini_offshore = "30062023"
 
-client_name = "MAURICIO DORNELLAS TABBAL CHAMATI"
+client_name = "ANTONIO LUCIANO DE CAMARGO FILHO & MARCIA MIYUKI IOSHIHARA"
 
 
 # Azul Claro, Laranja, Azul Escuro, Cinza, Verde, Preto, Branco
@@ -1958,5 +1958,5 @@ for slide_idx in range(len(prs.slides)):
         pass
 
 prs.save(
-    f"{folder}/{client_name}_{meses[data_fim.month]}2024_aaaa.pptx")
+    f"{folder}/{client_name}_{meses[data_fim.month]}2024.pptx")
 print(f"{client_name} report DONE.")

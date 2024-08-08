@@ -29,7 +29,7 @@ import traceback
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
-data_fim = datetime(2024, 6, 28)  # TODO MUDAR
+data_fim = datetime(2024, 7, 31)  # TODO MUDAR
 folder = "JUL24"  # TODO MUDAR
 username = "ekho.fo"
 password = "EKH@fo2024"
@@ -311,7 +311,7 @@ def fill_asset_table(start_slide, dict_df, max_rows_len=18):
                 for idx, elem in enumerate(table_idx_list):
                     shape = [shape for shape in slide.shapes if shape.name ==
                              f"rentabilidade_ativo_{elem}"][0]
-                    shape.left = 997200
+                    shape.left = Cm(2.52)
                     if idx == 0:
                         shape.top = 932400
                     else:
@@ -341,7 +341,7 @@ def fill_asset_table(start_slide, dict_df, max_rows_len=18):
         # print(f"elem: {elem}")
         shape = [shape for shape in slide.shapes if shape.name ==
                  f"rentabilidade_ativo_{elem}"][0]
-        shape.left = 997200
+        shape.left = Cm(2.52)
         if idx == 0:
             shape.top = 932400
         else:

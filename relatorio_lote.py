@@ -1471,7 +1471,7 @@ for client_name in clientes_on_off["name"].unique():
             table_boni_ano_onshore.cell(10, 5).text_frame.paragraphs[0].runs[0].text = round_if_numeric(100*carteira_ekho_onshore_ano.iloc[:,5].sum()/carteira_ekho_onshore_ano.iloc[:,10].sum(),0,"%",False) #Performance Relativa
             
             # tabela boni Offshore
-            slide = prs.slides[25]
+            slide = prs.slides[39]
             table_boni_mes_offshore = [shape for shape in slide.shapes if shape.name == "boni_mes"][0].table
             table_boni_ano_offshore = [shape for shape in slide.shapes if shape.name == "boni_ano"][0].table
             
@@ -1727,7 +1727,7 @@ for client_name in clientes_on_off["name"].unique():
 
             # slide 17 - Historico e Resumo por Conta (offshore)
 
-            slide = prs.slides[23]  # Acessa o slide desejado
+            slide = prs.slides[37]  # Acessa o slide desejado
             table_retorno_consolidado = [
                 shape for shape in slide.shapes if shape.name == "retorno_consolidado"][0].table
 
@@ -1830,7 +1830,7 @@ for client_name in clientes_on_off["name"].unique():
             total.top = visao_custodiante.top + visao_custodiante_height
 
             # slide 18 - Retorno por classe (Offshore)
-            slide = prs.slides[24]
+            slide = prs.slides[38]
             alocacao_classe = [
                 shape for shape in slide.shapes if shape.name == "alocacao_classe"][0].chart
 
@@ -1855,7 +1855,7 @@ for client_name in clientes_on_off["name"].unique():
                 remove_row(rentabilidade_classe, rentabilidade_classe.rows[len(cmd_offshore["df_ClasseDeAtivos"])+1])
 
             # slide 16 - Resumo Offshore
-            slide = prs.slides[22]
+            slide = prs.slides[36]
             carteiraBenchmark_on_table = [
                 shape for shape in slide.shapes if shape.name == "CarteiraBenchmark"][0].table
             liq_val1 = [shape for shape in slide.shapes if shape.name ==
@@ -1922,7 +1922,7 @@ for client_name in clientes_on_off["name"].unique():
 
             # Fill offshore tables
             max_slide_offshore = fill_asset_table(
-                26, final_offshore["dfs_class"], 18)
+                40, final_offshore["dfs_class"], 18)
 
             # Delete unused slides
             for slide_index in range(max_slide_offshore, 39):

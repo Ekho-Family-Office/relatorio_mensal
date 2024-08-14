@@ -1925,10 +1925,10 @@ for client_name in clientes_on_off["name"].unique():
                 40, final_offshore["dfs_class"], 18)
 
             # Delete unused slides
-            for slide_index in range(max_slide_offshore, 39):
+            for slide_index in range(max_slide_offshore, 67):
                 delete_slide(prs, max_slide_offshore+1)
 
-            for slide_index in range(max_slide_onshore, 20):
+            for slide_index in range(max_slide_onshore, 34):
                 delete_slide(prs, max_slide_onshore+1)
                 
             # slide_number

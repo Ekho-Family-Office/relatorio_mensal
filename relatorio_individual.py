@@ -36,13 +36,13 @@ username = "ekho.fo"
 password = "EKH@fo2024"
  
  
-portifolio_onshore = "1040"
-data_ini_onshore = "31052024"
+portifolio_onshore = "1019"
+data_ini_onshore = "05102023"
  
-portifolio_offshore = "2035"
-data_ini_offshore = "28062024"
+portifolio_offshore = "2019"
+data_ini_offshore = "06112023"
  
-client_name = "DIOGO LOPES VILELA BERBEL"
+client_name = "JUAREZ JOSE ZORTEA"
 
 
 # Azul Claro, Laranja, Azul Escuro, Cinza, Verde, Preto, Branco
@@ -617,8 +617,8 @@ def get_cmd_data(portifolio, region="onshore", data_ini="02012000"):
     
     combined_ativos_IF["Liquidez"]=combined_ativos_IF["Liquidez"].apply(
         lambda x: "-" if x=="" or x=="(vide regulamento)" else x)
-    
-    
+
+
 
     ipca_desde_ini = cmd_historico_acum(
         username, password, ticker="IBGE_IPCA15", data_ini=data_inicio_carteira_str, data_fim=data_fim_str)
@@ -653,6 +653,15 @@ def perf_attr_fill(order_list, df_PerfAttr, slide):
 
     if "Caixa" in order_list:
         order_list.remove("Caixa")
+    
+    items_with_nan = df_PerfAttr[df_PerfAttr[df_PerfAttr.columns[1]].isna()][df_PerfAttr.columns[0]].tolist()
+    
+    if len(items_with_nan)>0:
+        for item in items_with_nan:
+            if item in order_list:
+                order_list.remove(item)
+            df_PerfAttr = df_PerfAttr[df_PerfAttr[df_PerfAttr.columns[0]] != item]
+            
 
     df_PerfAttr.loc[:, 'Classe_cat'] = pd.Categorical(
         df_PerfAttr['Classe'],
@@ -1164,7 +1173,8 @@ carteira_ekho_offshore_mes = carteira_ekho_offshore_mes.fillna(0)
 carteira_ekho_offshore_mes["benchmark_return"] =  carteira_ekho_offshore_mes["benchmark"].apply(lambda x: accum_return(df_benchmarks[x],previous_month_last_workday(final_offshore["end_date"]).strftime(
     "%Y-%m-%d"), final_offshore["end_date"].strftime("%Y-%m-%d"))[-1])
 carteira_ekho_offshore_mes = carteira_ekho_offshore_mes.replace("nd",0)
-
+carteira_ekho_offshore_mes = carteira_ekho_offshore_mes.replace("",0)
+carteira_ekho_offshore_mes = carteira_ekho_offshore_mes.fillna(0)
 column_indices = [0,1,2,3,4,5,6,7,8,9]
 new_names = ['classe','peso_pl','benchmark','benchmark_name','saldo_bruto','peso_aloc','performance','contrib_bruta_value','contrib_bruta_percent','perf_benchmark']
 old_names = carteira_ekho_offshore_mes.columns[column_indices]
@@ -1188,6 +1198,8 @@ carteira_ekho_offshore_ano = carteira_ekho_offshore_ano.fillna(0)
 carteira_ekho_offshore_ano["benchmark_return"] =  carteira_ekho_offshore_ano["benchmark"].apply(lambda x: accum_return(df_benchmarks[x],previous_month_last_workday(datetime(final_offshore["end_date"].year, 1, 10)).strftime(
     "%Y-%m-%d"), final_offshore["end_date"].strftime("%Y-%m-%d"))[-1])
 carteira_ekho_offshore_ano = carteira_ekho_offshore_ano.replace("nd",0)
+carteira_ekho_offshore_ano = carteira_ekho_offshore_ano.replace("",0)
+carteira_ekho_offshore_ano = carteira_ekho_offshore_ano.fillna(0)
 
 column_indices = [0,1,2,3,4,5,6,7,8,9]
 new_names = ['classe','peso_pl','benchmark','benchmark_name','saldo_bruto','peso_aloc','performance','contrib_bruta_value','contrib_bruta_percent','perf_benchmark']

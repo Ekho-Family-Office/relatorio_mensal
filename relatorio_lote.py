@@ -625,6 +625,15 @@ def perf_attr_fill(order_list, df_PerfAttr, slide):
 
     if "Caixa" in order_list:
         order_list.remove("Caixa")
+        
+    items_with_nan = df_PerfAttr[df_PerfAttr[df_PerfAttr.columns[1]].isna()][df_PerfAttr.columns[0]].tolist()
+    
+    if len(items_with_nan)>0:
+        for item in items_with_nan:
+            if item in order_list:
+                order_list.remove(item)
+            df_PerfAttr = df_PerfAttr[df_PerfAttr[df_PerfAttr.columns[0]] != item]
+            
 
     df_PerfAttr.loc[:, 'Classe_cat'] = pd.Categorical(
         df_PerfAttr['Classe'],
@@ -1154,6 +1163,8 @@ for client_name in clientes_on_off["name"].unique():
             carteira_ekho_offshore_mes["benchmark_return"] =  carteira_ekho_offshore_mes["benchmark"].apply(lambda x: accum_return(df_benchmarks[x],previous_month_last_workday(final_offshore["end_date"]).strftime(
                 "%Y-%m-%d"), final_offshore["end_date"].strftime("%Y-%m-%d"))[-1])
             carteira_ekho_offshore_mes = carteira_ekho_offshore_mes.replace("nd",0)
+            carteira_ekho_offshore_mes = carteira_ekho_offshore_mes.replace("",0)
+            carteira_ekho_offshore_mes = carteira_ekho_offshore_mes.fillna(0)
             
             column_indices = [0,1,2,3,4,5,6,7,8,9]
             new_names = ['classe','peso_pl','benchmark','benchmark_name','saldo_bruto','peso_aloc','performance','contrib_bruta_value','contrib_bruta_percent','perf_benchmark']
@@ -1178,6 +1189,8 @@ for client_name in clientes_on_off["name"].unique():
             carteira_ekho_offshore_ano["benchmark_return"] =  carteira_ekho_offshore_ano["benchmark"].apply(lambda x: accum_return(df_benchmarks[x],previous_month_last_workday(datetime(final_offshore["end_date"].year, 1, 10)).strftime(
                 "%Y-%m-%d"), final_offshore["end_date"].strftime("%Y-%m-%d"))[-1])
             carteira_ekho_offshore_ano = carteira_ekho_offshore_ano.replace("nd",0)
+            carteira_ekho_offshore_ano = carteira_ekho_offshore_ano.replace("",0)
+            carteira_ekho_offshore_ano = carteira_ekho_offshore_ano.fillna(0)
             
             column_indices = [0,1,2,3,4,5,6,7,8,9]
             new_names = ['classe','peso_pl','benchmark','benchmark_name','saldo_bruto','peso_aloc','performance','contrib_bruta_value','contrib_bruta_percent','perf_benchmark']
@@ -1202,6 +1215,8 @@ for client_name in clientes_on_off["name"].unique():
             carteira_ekho_onshore_mes["benchmark_return"] =  carteira_ekho_onshore_mes["benchmark"].apply(lambda x: accum_return(df_benchmarks[x],previous_month_last_workday(final_onshore["end_date"]).strftime(
                 "%Y-%m-%d"), final_onshore["end_date"].strftime("%Y-%m-%d"))[-1])
             carteira_ekho_onshore_mes = carteira_ekho_onshore_mes.replace("nd",0)
+            carteira_ekho_onshore_mes = carteira_ekho_onshore_mes.replace("",0)
+            carteira_ekho_onshore_mes = carteira_ekho_onshore_mes.fillna(0)
             
             column_indices = [0,1,2,3,4,5,6,7,8,9]
             new_names = ['classe','peso_pl','benchmark','benchmark_name','saldo_bruto','peso_aloc','performance','contrib_bruta_value','contrib_bruta_percent','perf_benchmark']
@@ -1226,6 +1241,8 @@ for client_name in clientes_on_off["name"].unique():
             carteira_ekho_onshore_ano["benchmark_return"] =  carteira_ekho_onshore_ano["benchmark"].apply(lambda x: accum_return(df_benchmarks[x],previous_month_last_workday(datetime(final_offshore["end_date"].year, 1, 10)).strftime(
                 "%Y-%m-%d"), final_onshore["end_date"].strftime("%Y-%m-%d"))[-1])
             carteira_ekho_onshore_ano = carteira_ekho_onshore_ano.replace("nd",0)
+            carteira_ekho_onshore_ano = carteira_ekho_onshore_ano.replace("",0)
+            carteira_ekho_onshore_ano = carteira_ekho_onshore_ano.fillna(0)
             
             column_indices = [0,1,2,3,4,5,6,7,8,9]
             new_names = ['classe','peso_pl','benchmark','benchmark_name','saldo_bruto','peso_aloc','performance','contrib_bruta_value','contrib_bruta_percent','perf_benchmark']
@@ -2047,6 +2064,8 @@ for client_name in clientes_onshore["name"].unique():
             carteira_ekho_onshore_mes["benchmark_return"] =  carteira_ekho_onshore_mes["benchmark"].apply(lambda x: accum_return(df_benchmarks[x],previous_month_last_workday(final_onshore["end_date"]).strftime(
                 "%Y-%m-%d"), final_onshore["end_date"].strftime("%Y-%m-%d"))[-1])
             carteira_ekho_onshore_mes = carteira_ekho_onshore_mes.replace("nd",0)
+            carteira_ekho_onshore_mes = carteira_ekho_onshore_mes.replace("",0)
+            carteira_ekho_onshore_mes = carteira_ekho_onshore_mes.fillna(0)
             
             column_indices = [0,1,2,3,4,5,6,7,8,9]
             new_names = ['classe','peso_pl','benchmark','benchmark_name','saldo_bruto','peso_aloc','performance','contrib_bruta_value','contrib_bruta_percent','perf_benchmark']
@@ -2068,9 +2087,11 @@ for client_name in clientes_onshore["name"].unique():
             carteira_ekho_onshore_ano = pd.merge(carteira_ekho_onshore, cmd_onshore["df_PerfAttr"].iloc[:,[1,2,3,7,8,9]], left_on="classe", right_on="Classe", how="left")
             carteira_ekho_onshore_ano = carteira_ekho_onshore_ano.drop(columns="Classe")
             carteira_ekho_onshore_ano = carteira_ekho_onshore_ano.fillna(0)
-            carteira_ekho_onshore_ano["benchmark_return"] =  carteira_ekho_onshore_ano["benchmark"].apply(lambda x: accum_return(df_benchmarks[x],previous_month_last_workday(datetime(final_offshore["end_date"].year, 1, 10)).strftime(
+            carteira_ekho_onshore_ano["benchmark_return"] =  carteira_ekho_onshore_ano["benchmark"].apply(lambda x: accum_return(df_benchmarks[x],previous_month_last_workday(datetime(final_onshore["end_date"].year, 1, 10)).strftime(
                 "%Y-%m-%d"), final_onshore["end_date"].strftime("%Y-%m-%d"))[-1])
             carteira_ekho_onshore_ano = carteira_ekho_onshore_ano.replace("nd",0)
+            carteira_ekho_onshore_ano = carteira_ekho_onshore_ano.replace("",0)
+            carteira_ekho_onshore_ano = carteira_ekho_onshore_ano.fillna(0)
             
             column_indices = [0,1,2,3,4,5,6,7,8,9]
             new_names = ['classe','peso_pl','benchmark','benchmark_name','saldo_bruto','peso_aloc','performance','contrib_bruta_value','contrib_bruta_percent','perf_benchmark']

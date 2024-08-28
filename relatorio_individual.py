@@ -292,6 +292,7 @@ def fill_asset_table(start_slide, dict_df, max_rows_len=18):
 
         while not next_table:
             table_rows = 20
+            flag=0
 
             slide = prs.slides[slide_counter]  # Acessa o slide
             table_idx_list.append(index)  # Adiciona tabela percorrida na lista
@@ -306,6 +307,7 @@ def fill_asset_table(start_slide, dict_df, max_rows_len=18):
             if previous_table_rows_len != 0:
                 table_rows -= 1
                 # Remove a primeira linha caso a tabela esteja na metade
+                flag=1
                 remove_row(rentabilidade_ativo_table,
                            rentabilidade_ativo_table.rows[0])
             else:
@@ -322,8 +324,11 @@ def fill_asset_table(start_slide, dict_df, max_rows_len=18):
 
             for i in range(table_rows_len):
                 for j in range(number_of_columns):
-                    rentabilidade_ativo_table.cell(
-                        i, j+1).text_frame.paragraphs[0].runs[0].text = df.iloc[i, j]
+                    if (j == number_of_columns-1 or j==number_of_columns-2) and (i+flag)%2==0:
+                        pass
+                    else:
+                        rentabilidade_ativo_table.cell(
+                            i, j+1).text_frame.paragraphs[0].runs[0].text = df.iloc[i, j]
 
             for row_idx in range(table_rows_len, table_rows+1):
                 remove_row(rentabilidade_ativo_table,
@@ -341,7 +346,7 @@ def fill_asset_table(start_slide, dict_df, max_rows_len=18):
                 for idx, elem in enumerate(table_idx_list):
                     shape = [shape for shape in slide.shapes if shape.name ==
                              f"rentabilidade_ativo_{elem}"][0]
-                    shape.left = Cm(2.52)
+                    shape.left = Cm(2.57)
                     if idx == 0:
                         shape.top = 932400
                     else:
@@ -371,7 +376,7 @@ def fill_asset_table(start_slide, dict_df, max_rows_len=18):
         # print(f"elem: {elem}")
         shape = [shape for shape in slide.shapes if shape.name ==
                  f"rentabilidade_ativo_{elem}"][0]
-        shape.left = Cm(2.52)
+        shape.left = Cm(2.57)
         if idx == 0:
             shape.top = 932400
         else:

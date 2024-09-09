@@ -603,6 +603,14 @@ def get_cmd_data(portifolio, region="onshore", data_ini="02012000"):
 
     cpi_desde_ini = cmd_historico_acum(
         username, password, ticker="US:BLS_CPI_forecast", data_ini=data_inicio_carteira_str, data_fim=data_fim_str)
+    
+    if {'Total Disponível', 'Total da Carteira'}.issubset(combined_ativos_IF['Ativo'].values):
+        indice_inicial = combined_ativos_IF[combined_ativos_IF['Ativo'] == 'Total Disponível'].index[0]
+        indice_final = combined_ativos_IF[combined_ativos_IF['Ativo'] == 'Total da Carteira'].index[0]
+        df_valores_liquidar = combined_ativos_IF.loc[indice_inicial + 1:indice_final - 1]
+    else:
+        df_valores_liquidar = pd.DataFrame(columns=combined_ativos_IF.columns)
+
 
     cmd_data = {"data_inicio_carteira": data_inicio_carteira,
                 "df_PL": df_PL,
@@ -617,7 +625,8 @@ def get_cmd_data(portifolio, region="onshore", data_ini="02012000"):
                 "df_Volatilidade": df_Volatilidade,
                 "ipca_desde_ini": ipca_desde_ini,
                 "cpi_desde_ini": cpi_desde_ini,
-                "if_liquidez":combined_ativos_IF}
+                "if_liquidez":combined_ativos_IF,
+                "df_valores_liquidar":df_valores_liquidar}
 
     return cmd_data
 
@@ -920,6 +929,8 @@ for client_name in clientes_on_off["name"].unique():
                 "%Y-%m-%d"), end=(cmd_offshore["df_PL"].index[-1]+timedelta(1)).strftime("%Y-%m-%d"))["Close"].tz_localize(None)  # USDBRL
             cmd_offshore["df_PL"]["PL BRL"] = cmd_offshore["df_PL"]["USDBRL"] * \
                 cmd_offshore["df_PL"]["PL"]
+                
+            usd_brl = cmd_offshore["df_PL"]["USDBRL"][-1]
 
             final_onshore["PL_final"] = cmd_onshore["df_PL"]["PL"][-1]
             final_offshore["PL_final"] = cmd_offshore["df_PL"]["PL BRL"][-1]
@@ -969,6 +980,15 @@ for client_name in clientes_on_off["name"].unique():
 
             final_onshore["df_final_ResumoPorConta"] = cmd_onshore["df_ResumoPorConta"].copy(
             ).reset_index(drop=True)
+            if not cmd_onshore["df_valores_liquidar"].empty:
+                valor = cmd_onshore["df_valores_liquidar"].sum()[5]
+                df_final_valores_liquidar = pd.DataFrame(columns=final_onshore["df_final_ResumoPorConta"].columns)
+                df_final_valores_liquidar.loc[0] = ['', "Valores a Liquidar*",0,valor,0,valor,0]
+                final_onshore["df_final_ResumoPorConta"] = pd.concat([final_onshore["df_final_ResumoPorConta"], df_final_valores_liquidar], ignore_index=True)
+                final_onshore["df_final_ResumoPorConta"]["%"] = (final_onshore["df_final_ResumoPorConta"].iloc[:,5]/final_onshore["df_final_ResumoPorConta"].iloc[:,5].sum())*100
+                
+            df_final_ResumoPorConta_float = final_onshore["df_final_ResumoPorConta"].copy()
+
             final_onshore["df_final_ResumoPorConta"]["Ativo"] = final_onshore["df_final_ResumoPorConta"]["Ativo"].str.upper(
             )
             final_onshore["df_final_ResumoPorConta"].iloc[:, 2:-1] = final_onshore["df_final_ResumoPorConta"].iloc[:,
@@ -1395,6 +1415,7 @@ for client_name in clientes_on_off["name"].unique():
                 shape for shape in slide.shapes if shape.name == "evolucao"][0].chart
             diversificacao_patrimonio_table = [
                 shape for shape in slide.shapes if shape.name == "diversificacao_patrimonio"][0].table
+            usd_brl_ppt = [shape for shape in slide.shapes if shape.name == "USDBRL"][0]
 
             # Onshore / Offshore
             for i in range(5):
@@ -1420,12 +1441,24 @@ for client_name in clientes_on_off["name"].unique():
             # ---replace chart data---
             geografica_graf.replace_data(chart_data)
 
+            usd_brl_ppt.text_frame.paragraphs[0].runs[0].text = round_if_numeric(usd_brl, 4, "")
+
+
             diversificacao_patrimonio_table.cell(1, 1).text_frame.paragraphs[0].runs[0].text = round_if_numeric(
                 final_onshore["PL_final"], 0, "R$ ")
             diversificacao_patrimonio_table.cell(2, 1).text_frame.paragraphs[0].runs[0].text = round_if_numeric(
                 final_offshore["PL_final"], 0, "R$ ")
             diversificacao_patrimonio_table.cell(3, 1).text_frame.paragraphs[0].runs[0].text = round_if_numeric(
                 final_onshore["PL_final"]+final_offshore["PL_final"], 0, "R$ ")
+            
+            
+            diversificacao_patrimonio_table.cell(1, 2).text_frame.paragraphs[0].runs[0].text = round_if_numeric(
+                final_onshore["PL_final"]/usd_brl, 0, "$ ")
+            diversificacao_patrimonio_table.cell(2, 2).text_frame.paragraphs[0].runs[0].text = round_if_numeric(
+                final_offshore["PL_final"]/usd_brl, 0, "$ ")
+            diversificacao_patrimonio_table.cell(3, 2).text_frame.paragraphs[0].runs[0].text = round_if_numeric(
+                (final_onshore["PL_final"]+final_offshore["PL_final"])/usd_brl, 0, "$ ")
+
             
             
             #tabela boni Onshore
@@ -1662,16 +1695,21 @@ for client_name in clientes_on_off["name"].unique():
             table_visao_custodiante = visao_custodiante.table
             total = [shape for shape in slide.shapes if shape.name == "total"][0]
             table_total = total.table
-            total_onshore = cmd_onshore["df_ResumoPorConta"].sum()
+            valores_liquidar = [shape for shape in slide.shapes if shape.name == "valores_liquidar"][0]
+            
+            total_onshore = df_final_ResumoPorConta_float.sum()
+            
+            if not cmd_onshore["df_valores_liquidar"].empty:
+                valores_liquidar.text_frame.paragraphs[0].runs[0].text = "*Tabela com ativos a liquidar disponíveis no final do relatório"
+            else:
+                valores_liquidar.text_frame.paragraphs[0].runs[0].text = ""
+
+
             for i in range(len(total_onshore)-3):
                 table_total.cell(
                     0, i+1).text_frame.paragraphs[0].runs[0].text = round_if_numeric(total_onshore[i+2], 0, "R$ ")
             table_total.cell(0, 5).text_frame.paragraphs[0].runs[0].text = round_if_numeric(
                 total_onshore[6], 1, "%", False)
-
-            # if len(final_onshore["df_final_ResumoPorConta"]) > 1:
-            #         for _ in range(2,len(final_onshore["df_final_ResumoPorConta"])):
-            #             add_row(table_visao_custodiante)
 
             for row in range(len(final_onshore["df_final_ResumoPorConta"])):
                 for column in range(6):
@@ -1945,6 +1983,28 @@ for client_name in clientes_on_off["name"].unique():
             # Fill offshore tables
             max_slide_offshore = fill_asset_table(
                 40, final_offshore["dfs_class"], 18)
+            
+            if not cmd_onshore["df_valores_liquidar"].empty:
+                slide = prs.slides[68]
+                valores_liq = [shape for shape in slide.shapes if shape.name == "valores_liq"][0].table
+                
+                table_len = cmd_onshore["df_valores_liquidar"].shape[0]
+                
+                
+                for i in range(table_len):
+                        valores_liq.cell(
+                            i, 0).text_frame.paragraphs[0].runs[0].text = cmd_onshore["df_valores_liquidar"].iloc[i, 1]
+                        
+                        valores_liq.cell(
+                            i, 1).text_frame.paragraphs[0].runs[0].text = round_if_numeric(cmd_onshore["df_valores_liquidar"].iloc[i, 5], 0, "R$ ")
+                
+                
+                for _ in range(table_len, 20):
+                    remove_row(valores_liq,valores_liq.rows[table_len])
+                
+                
+            else:
+                delete_slide(prs, 68)
 
             # Delete unused slides
             for slide_index in range(max_slide_offshore, 67):
@@ -2055,6 +2115,15 @@ for client_name in clientes_onshore["name"].unique():
                 lambda x: round_if_numeric(x, 1, "%", False))
             final_onshore["df_final_ResumoPorConta"] = cmd_onshore["df_ResumoPorConta"].copy(
             ).reset_index(drop=True)
+            if not cmd_onshore["df_valores_liquidar"].empty:
+                valor = cmd_onshore["df_valores_liquidar"].sum()[5]
+                df_final_valores_liquidar = pd.DataFrame(columns=final_onshore["df_final_ResumoPorConta"].columns)
+                df_final_valores_liquidar.loc[0] = ['', "Valores a Liquidar*",0,valor,0,valor,0]
+                final_onshore["df_final_ResumoPorConta"] = pd.concat([final_onshore["df_final_ResumoPorConta"], df_final_valores_liquidar], ignore_index=True)
+                final_onshore["df_final_ResumoPorConta"]["%"] = (final_onshore["df_final_ResumoPorConta"].iloc[:,5]/final_onshore["df_final_ResumoPorConta"].iloc[:,5].sum())*100
+                
+            df_final_ResumoPorConta_float = final_onshore["df_final_ResumoPorConta"].copy()
+
             final_onshore["df_final_ResumoPorConta"]["Ativo"] = final_onshore["df_final_ResumoPorConta"]["Ativo"].str.upper(
             )
             final_onshore["df_final_ResumoPorConta"].iloc[:, 2:-1] = final_onshore["df_final_ResumoPorConta"].iloc[:,
@@ -2419,7 +2488,17 @@ for client_name in clientes_onshore["name"].unique():
             table_visao_custodiante = visao_custodiante.table
             total = [shape for shape in slide.shapes if shape.name == "total"][0]
             table_total = total.table
-            total_onshore = cmd_onshore["df_ResumoPorConta"].sum()
+            
+            valores_liquidar = [shape for shape in slide.shapes if shape.name == "valores_liquidar"][0]
+            
+            total_onshore = df_final_ResumoPorConta_float.sum()
+            
+            if not cmd_onshore["df_valores_liquidar"].empty:
+                valores_liquidar.text_frame.paragraphs[0].runs[0].text = "*Tabela com ativos a liquidar disponíveis no final do relatório"
+            else:
+                valores_liquidar.text_frame.paragraphs[0].runs[0].text = ""
+
+
             for i in range(len(total_onshore)-3):
                 table_total.cell(
                     0, i+1).text_frame.paragraphs[0].runs[0].text = round_if_numeric(total_onshore[i+2], 0, "R$ ")
@@ -2507,6 +2586,28 @@ for client_name in clientes_onshore["name"].unique():
             # Fill onshore tables
             max_slide_onshore = fill_asset_table(
                 7, final_onshore["dfs_class"], 18)
+            
+            if not cmd_onshore["df_valores_liquidar"].empty:
+                slide = prs.slides[28]
+                valores_liq = [shape for shape in slide.shapes if shape.name == "valores_liq"][0].table
+                
+                table_len = cmd_onshore["df_valores_liquidar"].shape[0]
+                
+                
+                for i in range(table_len):
+                        valores_liq.cell(
+                            i, 0).text_frame.paragraphs[0].runs[0].text = cmd_onshore["df_valores_liquidar"].iloc[i, 1]
+                        
+                        valores_liq.cell(
+                            i, 1).text_frame.paragraphs[0].runs[0].text = round_if_numeric(cmd_onshore["df_valores_liquidar"].iloc[i, 5], 0, "R$ ")
+                
+                
+                for _ in range(table_len, 20):
+                    remove_row(valores_liq,valores_liq.rows[table_len])
+                
+                
+            else:
+                delete_slide(prs, 28)
 
             for slide_index in range(max_slide_onshore, 20):
                 delete_slide(prs, max_slide_onshore+1)

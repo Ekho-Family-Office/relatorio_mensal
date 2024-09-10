@@ -35,10 +35,10 @@ username = "ekho.fo"
 password = "EKH@fo2024"
  
  
-portifolio_onshore = "PP0595_consolidado"
+portifolio_onshore = "2014"
 data_ini_onshore = "19062019"
  
-portifolio_offshore = "PP0595_consolidado"
+portifolio_offshore = "2014"
 data_ini_offshore = "06112023"
  
 client_name = "ILSON APARECIDO STABILE"
@@ -620,7 +620,7 @@ def get_cmd_data(portifolio, region="onshore", data_ini="02012000"):
     combined_ativos_IF = pd.concat(ativos_IF, ignore_index=True)
     
     combined_ativos_IF["Liquidez"]=combined_ativos_IF["Liquidez"].apply(
-        lambda x: "-" if x=="" or x=="(vide regulamento)" else x)
+        lambda x: "-" if x=="" or x=="(vide regulamento)" or x=="nd" else x)
 
 
 

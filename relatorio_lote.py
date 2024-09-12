@@ -2588,7 +2588,7 @@ for client_name in clientes_onshore["name"].unique():
                 7, final_onshore["dfs_class"], 18)
             
             if not cmd_onshore["df_valores_liquidar"].empty:
-                slide = prs.slides[28]
+                slide = prs.slides[18]
                 valores_liq = [shape for shape in slide.shapes if shape.name == "valores_liq"][0].table
                 
                 table_len = cmd_onshore["df_valores_liquidar"].shape[0]
@@ -2607,7 +2607,7 @@ for client_name in clientes_onshore["name"].unique():
                 
                 
             else:
-                delete_slide(prs, 28)
+                delete_slide(prs, 18)
 
             for slide_index in range(max_slide_onshore, 20):
                 delete_slide(prs, max_slide_onshore+1)

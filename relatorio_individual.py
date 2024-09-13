@@ -993,7 +993,7 @@ if not cmd_onshore["df_valores_liquidar"].empty:
     valor_inicial = cmd_onshore["df_valores_liquidar"].sum()[2]
     valor = cmd_onshore["df_valores_liquidar"].sum()[5]
     df_final_valores_liquidar = pd.DataFrame(columns=final_onshore["df_final_ResumoPorConta"].columns)
-    df_final_valores_liquidar.loc[0] = ['', "Valores a Liquidar*",valor_inicial,valor,0,valor,0]
+    df_final_valores_liquidar.loc[0] = ['', "Valores a Liquidar*",valor_inicial,valor-valor_inicial,0,valor,0]
     final_onshore["df_final_ResumoPorConta"] = pd.concat([final_onshore["df_final_ResumoPorConta"], df_final_valores_liquidar], ignore_index=True)
     final_onshore["df_final_ResumoPorConta"]["%"] = (final_onshore["df_final_ResumoPorConta"].iloc[:,5]/final_onshore["df_final_ResumoPorConta"].iloc[:,5].sum())*100
     
@@ -1992,7 +1992,6 @@ carteira_vs_bench.replace_data(chart_data)
 max_slide_onshore = fill_asset_table(
     7, final_onshore["dfs_class"], 18)
 
-# Fill offshore tables
 max_slide_offshore = fill_asset_table(
     40, final_offshore["dfs_class"], 18)
 

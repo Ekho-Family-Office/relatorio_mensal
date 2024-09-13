@@ -35,13 +35,13 @@ username = "ekho.fo"
 password = "EKH@fo2024"
  
  
-portifolio_onshore = "2014"
-data_ini_onshore = "19062019"
+portifolio_onshore = "3006"
+data_ini_onshore = "31052023"
  
-portifolio_offshore = "2014"
-data_ini_offshore = "06112023"
+portifolio_offshore = "3006"
+data_ini_offshore = "31052023"
  
-client_name = "ILSON APARECIDO STABILE"
+client_name = "JOAO ARAUJO E NATASHA ARAUJO"
 
 
 # Azul Claro, Laranja, Azul Escuro, Cinza, Verde, Preto, Branco
@@ -162,6 +162,9 @@ def accum_return(series, start_date, end_date):
 def convert_to_float(val):
     try:
         # Attempt to replace commas and convert to float
+        if val=="":
+            val = 0
+        
         return float(str(val).replace(',', '.'))
     except ValueError:
         # Return the value unchanged if conversion fails

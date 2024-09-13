@@ -1700,7 +1700,7 @@ for client_name in clientes_on_off["name"].unique():
             total_onshore = df_final_ResumoPorConta_float.sum()
             
             if not cmd_onshore["df_valores_liquidar"].empty:
-                valores_liquidar.text_frame.paragraphs[0].runs[0].text = "*Tabela com ativos a liquidar disponíveis no final do relatório"
+                valores_liquidar.text_frame.paragraphs[0].runs[0].text = "*Tabela com ativos a liquidar disponível no final do relatório"
             else:
                 valores_liquidar.text_frame.paragraphs[0].runs[0].text = ""
 
@@ -2494,7 +2494,7 @@ for client_name in clientes_onshore["name"].unique():
             total_onshore = df_final_ResumoPorConta_float.sum()
             
             if not cmd_onshore["df_valores_liquidar"].empty:
-                valores_liquidar.text_frame.paragraphs[0].runs[0].text = "*Tabela com ativos a liquidar disponíveis no final do relatório"
+                valores_liquidar.text_frame.paragraphs[0].runs[0].text = "*Tabela com ativos a liquidar disponível no final do relatório"
             else:
                 valores_liquidar.text_frame.paragraphs[0].runs[0].text = ""
 

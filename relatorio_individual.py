@@ -1571,7 +1571,7 @@ valores_liquidar = [shape for shape in slide.shapes if shape.name == "valores_li
 total_onshore = df_final_ResumoPorConta_float.sum()
 
 if not cmd_onshore["df_valores_liquidar"].empty:
-    valores_liquidar.text_frame.paragraphs[0].runs[0].text = "*Tabela com ativos a liquidar disponíveis no final do relatório"
+    valores_liquidar.text_frame.paragraphs[0].runs[0].text = "*Tabela com ativos a liquidar disponível no final do relatório"
 else:
     valores_liquidar.text_frame.paragraphs[0].runs[0].text = ""
 

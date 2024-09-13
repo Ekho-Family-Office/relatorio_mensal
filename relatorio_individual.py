@@ -990,9 +990,10 @@ final_onshore["df_final_RetornosNominais"].iloc[:, 2:] = final_onshore["df_final
 final_onshore["df_final_ResumoPorConta"] = cmd_onshore["df_ResumoPorConta"].copy(
 ).reset_index(drop=True)
 if not cmd_onshore["df_valores_liquidar"].empty:
+    valor_inicial = cmd_onshore["df_valores_liquidar"].sum()[2]
     valor = cmd_onshore["df_valores_liquidar"].sum()[5]
     df_final_valores_liquidar = pd.DataFrame(columns=final_onshore["df_final_ResumoPorConta"].columns)
-    df_final_valores_liquidar.loc[0] = ['', "Valores a Liquidar*",0,valor,0,valor,0]
+    df_final_valores_liquidar.loc[0] = ['', "Valores a Liquidar*",valor_inicial,valor,0,valor,0]
     final_onshore["df_final_ResumoPorConta"] = pd.concat([final_onshore["df_final_ResumoPorConta"], df_final_valores_liquidar], ignore_index=True)
     final_onshore["df_final_ResumoPorConta"]["%"] = (final_onshore["df_final_ResumoPorConta"].iloc[:,5]/final_onshore["df_final_ResumoPorConta"].iloc[:,5].sum())*100
     
@@ -2006,8 +2007,12 @@ if not cmd_onshore["df_valores_liquidar"].empty:
             valores_liq.cell(
                 i, 0).text_frame.paragraphs[0].runs[0].text = cmd_onshore["df_valores_liquidar"].iloc[i, 1]
             
-            valores_liq.cell(
-                i, 1).text_frame.paragraphs[0].runs[0].text = round_if_numeric(cmd_onshore["df_valores_liquidar"].iloc[i, 5], 0, "R$ ")
+            if cmd_onshore["df_valores_liquidar"].iloc[i, 5] == 0:
+                valores_liq.cell(
+                    i, 1).text_frame.paragraphs[0].runs[0].text = round_if_numeric(cmd_onshore["df_valores_liquidar"].iloc[i, 2], 0, "R$ ")
+            else:
+                valores_liq.cell(
+                    i, 1).text_frame.paragraphs[0].runs[0].text = round_if_numeric(cmd_onshore["df_valores_liquidar"].iloc[i, 5], 0, "R$ ")
     
     
     for _ in range(table_len, 20):

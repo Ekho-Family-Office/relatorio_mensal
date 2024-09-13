@@ -35,13 +35,13 @@ username = "ekho.fo"
 password = "EKH@fo2024"
  
  
-portifolio_onshore = "2014"
-data_ini_onshore = "19062019"
+portifolio_onshore = "3006"
+data_ini_onshore = "31052023"
  
-portifolio_offshore = "2014"
-data_ini_offshore = "06112023"
+portifolio_offshore = "3006"
+data_ini_offshore = "31052023"
  
-client_name = "ILSON APARECIDO STABILE"
+client_name = "JOAO ARAUJO E NATASHA ARAUJO"
 
 
 # Azul Claro, Laranja, Azul Escuro, Cinza, Verde, Preto, Branco
@@ -162,6 +162,9 @@ def accum_return(series, start_date, end_date):
 def convert_to_float(val):
     try:
         # Attempt to replace commas and convert to float
+        if val=="":
+            val = 0
+        
         return float(str(val).replace(',', '.'))
     except ValueError:
         # Return the value unchanged if conversion fails
@@ -1571,7 +1574,7 @@ valores_liquidar = [shape for shape in slide.shapes if shape.name == "valores_li
 total_onshore = df_final_ResumoPorConta_float.sum()
 
 if not cmd_onshore["df_valores_liquidar"].empty:
-    valores_liquidar.text_frame.paragraphs[0].runs[0].text = "*Tabela com ativos a liquidar disponíveis no final do relatório"
+    valores_liquidar.text_frame.paragraphs[0].runs[0].text = "*Tabela com ativos a liquidar disponível no final do relatório"
 else:
     valores_liquidar.text_frame.paragraphs[0].runs[0].text = ""
 

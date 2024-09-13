@@ -2013,8 +2013,9 @@ if not cmd_onshore["df_valores_liquidar"].empty:
                 valores_liq.cell(
                     i, 1).text_frame.paragraphs[0].runs[0].text = round_if_numeric(cmd_onshore["df_valores_liquidar"].iloc[i, 5], 0, "R$ ")
     
-    
-    for _ in range(table_len, 20):
+    if table_len > 19:
+        print("##########  VALORES A LIQUIDAR EXCEDEU O LIMITE!!!  ##########")
+    for _ in range(table_len, 33):
         remove_row(valores_liq,valores_liq.rows[table_len])
     
     

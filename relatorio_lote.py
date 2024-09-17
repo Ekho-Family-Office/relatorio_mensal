@@ -29,7 +29,7 @@ import traceback
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
-data_fim = datetime(2024, 7, 31)  # TODO MUDAR
+data_fim = datetime(2024, 8, 30)  # TODO MUDAR
 folder = "JUL24"  # TODO MUDAR
 username = "ekho.fo"
 password = "EKH@fo2024"
@@ -1745,7 +1745,7 @@ for client_name in clientes_on_off["name"].unique():
                         cell.text_frame.paragraphs[0].font.size = Pt(8)
                         cell.text_frame.paragraphs[0].font.bold = True
 
-            for _ in range(row+3, 9):
+            for _ in range(row+3, 10):
                 remove_row(table_visao_custodiante,
                             table_visao_custodiante.rows[row+3])
 
@@ -1874,7 +1874,7 @@ for client_name in clientes_on_off["name"].unique():
                         cell.text_frame.paragraphs[0].font.size = Pt(8)
                         cell.text_frame.paragraphs[0].font.bold = True
 
-            for _ in range(row+3, 9):
+            for _ in range(row+3, 10):
                 remove_row(table_visao_custodiante,
                             table_visao_custodiante.rows[row+3])
 

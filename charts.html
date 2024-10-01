@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApexCharts Pie Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body>
+    <div id="chart"></div>
+
+    <script>
+        var options = {
+            chart: {
+                type: 'pie',
+                height: 350
+            },
+            series: [6426380.42, 3132842.64], // Values for each segment
+            labels: ['R$ 6.426.380,42', 'R$ 3.132.842,64'], // Labels for each segment
+            dataLabels: {
+                enabled: true,
+                dropShadow: {
+                    enabled: false // This disables the shadow
+                },
+                formatter: function (val, opts) {
+                    // Get the index of the data point
+                    let seriesIndex = opts.seriesIndex;
+                    // Get the label for the segment
+                    let label = opts.w.globals.labels[seriesIndex];
+                    return [val.toFixed(0)+'%' , label];
+                    
+                },
+                style: {
+                    textAnchor: 'end', // Aligns text to the left
+                    fontFamily:'ff3',
+                    fontStyle:'normal',
+                    fontSize: '20px',
+                    fontWeight: 'normal',
+                    textShadow: 'none',
+                    colors: ['#fff'],
+                },
+                background: {
+                    enabled: true,
+                    foreColor: '#000',
+                    borderRadius: 2,
+                    padding: 4,
+                    opacity: 1,
+                    borderWidth: 1,
+                    borderColor: '#fff',
+                    dropShadow: {
+                                        enabled: false // Remove shadow for simplicity
+                                    }
+                },
+
+            },
+            plotOptions: {
+                pie: {
+                    dataLabels: {
+                        offset: -20 // Adjust label position
+                    },
+                    customScale: 1.05 // Adjust the size of the pie chart
+                }
+            },
+            colors: ['#4682B4', '#87CEFA'], // Colors for the pie segments
+            legend: {
+                show: false // Hide the legend since labels are shown on the chart
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    </script>
+</body>
+</html>

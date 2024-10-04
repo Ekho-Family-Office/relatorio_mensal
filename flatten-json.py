@@ -3,7 +3,7 @@ import csv
 import pandas as pd
 
 # Read file responseoutput.txt into a string
-with open('response_output.txt', 'r') as file:
+with open('response_output_new.txt', 'r') as file:
     response_data = file.read()
 
 # Load JSON data
@@ -33,4 +33,4 @@ for table_name in all_tables:
     print("\n")
 
     # Write to CSV
-    df.to_csv(f'{table_name}_output.csv', index=False, sep=';', encoding='utf-8-sig')
+    df.to_csv(f'{table_name}_classe_ekho_output.csv', index=False, sep=';', encoding='utf-8-sig')

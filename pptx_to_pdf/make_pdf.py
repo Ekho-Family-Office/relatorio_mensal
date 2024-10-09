@@ -39,7 +39,6 @@ def convert_pptx_to_pdf(pptx_folder, pdf_folder):
             presentation.SaveAs(pdf_path, FileFormat=32)  # 32 é o formato PDF
             presentation.Close()
 
-    # Fecha o PowerPoint
     powerpoint.Quit()
     
 def renumerate_pptx(pptx_folder):

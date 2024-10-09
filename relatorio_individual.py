@@ -29,19 +29,19 @@ from pptx.enum.text import PP_ALIGN
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
-data_fim = datetime(2024, 8, 30)  # TODO MUDAR
+data_fim = datetime(2024, 9, 30)  # TODO MUDAR
 folder = "JUL24"  # TODO MUDAR
 username = "ekho.fo"
 password = "EKH@fo2024"
  
  
-portifolio_onshore = "3006"
-data_ini_onshore = "31052023"
+portifolio_onshore = "1022"
+data_ini_onshore = "28022023"
  
-portifolio_offshore = "3006"
-data_ini_offshore = "31052023"
+portifolio_offshore = "4003"
+data_ini_offshore = "02032023"
  
-client_name = "JOAO ARAUJO E NATASHA ARAUJO"
+client_name = "CHRISTIANE DORES POLLASTRINI"
 
 
 # Azul Claro, Laranja, Azul Escuro, Cinza, Verde, Preto, Branco

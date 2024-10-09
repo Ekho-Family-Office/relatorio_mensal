@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Equity Table</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .table-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        th, td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            vertical-align: middle;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #4a4a4a;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        .left-header {
+            background-color: #1f3a93;
+            color: white;
+            writing-mode: vertical-rl;
+            text-align: center;
+            font-weight: bold;
+            padding: 0;
+            width: 40px;
+            font-size: 14px;
+        }
+        .data-row:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .data-row td {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .header-cell {
+            text-align: center;
+        }
+        td {
+            text-align: center;
+        }
+        .first-column {
+            text-align: left;
+            padding-left: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="6" class="left-header">PRIVATE EQUITY</th>
+                    <th class="header-cell">EMPRESA</th>
+                    <th class="header-cell">AQUISIÇÃO</th>
+                    <th class="header-cell">PAÍS SEDE</th>
+                    <th class="header-cell">SHARE %</th>
+                    <th class="header-cell">VALUATION</th>
+                    <th class="header-cell">MÉTODO VALUATION</th>
+                    <th class="header-cell">VALOR</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="data-row">
+                    <td class="first-column">Empresa de nome gigantesco Ltda.</td>
+                    <td>2015</td>
+                    <td>Brasil</td>
+                    <td>20%</td>
+                    <td>Valor Patrimonial</td>
+                    <td>Investidor</td>
+                    <td>R$ 8.000.000</td>
+                </tr>
+                <tr class="data-row">
+                    <td class="first-column">Empresa de nome maior ainda par...</td>
+                    <td>2021</td>
+                    <td>Brasil</td>
+                    <td>9%</td>
+                    <td>6% AUM</td>
+                    <td>Executivo</td>
+                    <td>R$ 15.390.000</td>
+                </tr>
+                <tr class="data-row">
+                    <td class="first-column">Nome curto S/A</td>
+                    <td>2019</td>
+                    <td>Brasil</td>
+                    <td>5%</td>
+                    <td>8x EBITDA</td>
+                    <td>Investidor</td>
+                    <td>R$ 80.000</td>
+                </tr>
+                <tr class="data-row">
+                    <td class="first-column">Empresa Apenas</td>
+                    <td>2020</td>
+                    <td>Brasil</td>
+                    <td>1%</td>
+                    <td>Última Marção</td>
+                    <td>Investidor</td>
+                    <td>R$ 400.000</td>
+                </tr>
+                <tr class="data-row">
+                    <td class="first-column">-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>R$ -</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,72 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.report-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.company-logo h1 {
+    font-size: 36px;
+    margin: 0;
+}
+
+.report-date p {
+    font-size: 18px;
+    margin: 0;
+}
+
+.insights-section, .breakdown-section, .details-section, .historical-performance-section {
+    margin-bottom: 20px;
+}
+
+.pie-chart-placeholder, .chart-placeholder, .table-placeholder {
+    background-color: #f9f9f9;
+    border: 2px dashed #ccc;
+    min-height: 150px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.details-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.details-section .pie-chart-placeholder, .details-section .table-placeholder {
+    flex: 1 1 calc(50% - 20px);
+}
+
+@media (max-width: 768px) {
+    .details-section .pie-chart-placeholder, .details-section .table-placeholder {
+        flex: 1 1 100%;
+    }
+}
+
+@media print {
+    body {
+        margin: 0;
+    }
+    .report-container {
+        width: 100%;
+        padding: 0;
+    }
+    .pie-chart-placeholder, .chart-placeholder, .table-placeholder {
+        page-break-inside: avoid;
+    }
+}

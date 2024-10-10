@@ -38,8 +38,8 @@ password = "EKH@fo2024"
 portifolio_onshore = "1010"
 data_ini_onshore = "22032024"
  
-portifolio_offshore = "1001"
-data_ini_offshore = "01042024"
+portifolio_offshore = "2037"
+data_ini_offshore = "05082024"
  
 client_name = "ANTONIO LUCIANO DE CAMARGO FILHO & MARCIA MIYUKI IOSHIHARA"
 
@@ -601,7 +601,7 @@ def get_cmd_data(portifolio, region="onshore", data_ini="02012000"):
     df_PerfAttr_ano.iloc[:, :] = df_PerfAttr_ano.iloc[:, :].applymap(convert_to_float)
 
     json_e23 = CMD_request("ExtratoCarteira023", portifolio,
-                           data_inicio_carteira_str, data_fim_str, first_workday_str, ret3="ativo%2Bmes_atual%2Bano_atual%2B6m%2B12m%2B24m%2B36m%2Bpercent_SB%2Bsaldo_bruto")
+                           data_inicio_carteira_str, data_fim_str, previous_month_last_workday_str, ret3="ativo%2Bmes_atual%2Bano_atual%2B6m%2B12m%2B24m%2B36m%2Bpercent_SB%2Bsaldo_bruto")
     df_ClasseDeAtivos = json_to_df(json_e23, "tab1")
 
     json_e7 = CMD_request("ExtratoCarteira007", portifolio, data_inicio_carteira_str,

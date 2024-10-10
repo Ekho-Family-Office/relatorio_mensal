@@ -1380,8 +1380,8 @@ for client_name in clientes_on_off["name"].unique():
             for df in final_offshore["dfs_class"]:
                 final_offshore["dfs_class"][df]["Liquidez"] = final_offshore["dfs_class"][df]["Ativo"].apply(lambda x: tabela_ativos(x,"Liquidez",onshore=False))
                 final_offshore["dfs_class"][df]["IF"] = final_offshore["dfs_class"][df]["Ativo"].apply(lambda x: tabela_ativos(x,"IF",onshore=False))
-
-
+                
+    
               ######################## PYTHON PPTX #########################
 
             prs = Presentation("templates/Template Relatório - ON + OFF.pptx")
@@ -1419,7 +1419,6 @@ for client_name in clientes_on_off["name"].unique():
             diversificacao_patrimonio_table = [
                 shape for shape in slide.shapes if shape.name == "diversificacao_patrimonio"][0].table
             usd_brl_ppt = [shape for shape in slide.shapes if shape.name == "USDBRL"][0]
-
             # Onshore / Offshore
             for i in range(5):
                 for j in range(5):
@@ -1468,7 +1467,7 @@ for client_name in clientes_on_off["name"].unique():
             slide = prs.slides[6]
             table_boni_mes_onshore = [shape for shape in slide.shapes if shape.name == "boni_mes"][0].table
             table_boni_ano_onshore = [shape for shape in slide.shapes if shape.name == "boni_ano"][0].table
-            
+           
             for row in range(len(carteira_ekho_onshore_mes)):
                 table_boni_mes_onshore.cell(3+row, 0).text_frame.paragraphs[0].runs[0].text = carteira_ekho_onshore_mes.iloc[row,0] #Classe
                 table_boni_mes_onshore.cell(3+row, 2).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_onshore_mes.iloc[row,1],0,"%",False) #% Alocado
@@ -1561,7 +1560,7 @@ for client_name in clientes_on_off["name"].unique():
             table_boni_mes_offshore.cell(12, 15).text_frame.paragraphs[0].runs[0].text = round_if_numeric(carteira_ekho_offshore_mes.iloc[:,12].sum(),1,"%",False) #Alocacao
             table_boni_mes_offshore.cell(12, 16).text_frame.paragraphs[0].runs[0].text = round_if_numeric((carteira_ekho_offshore_mes.iloc[:,11].sum())-(carteira_ekho_offshore_mes.iloc[:,12].sum()),1,"%",False) #Selecao
             table_boni_mes_offshore.cell(12, 5).text_frame.paragraphs[0].runs[0].text = round_if_numeric(100*carteira_ekho_offshore_mes.iloc[:,5].sum()/carteira_ekho_offshore_mes.iloc[:,10].sum(),0,"%",False) #Performance Relativa
-            
+
             
             for row in range(len(carteira_ekho_offshore_ano)):
                 table_boni_ano_offshore.cell(3+row, 0).text_frame.paragraphs[0].runs[0].text = carteira_ekho_offshore_ano.iloc[row,0] #Classe
@@ -1659,7 +1658,6 @@ for client_name in clientes_on_off["name"].unique():
             slide = prs.slides[4]  # Acessa o slide desejado
             table_retorno_consolidado = [
                 shape for shape in slide.shapes if shape.name == "retorno_consolidado"][0].table
-
             for row in range(len(final_onshore["df_final_RetornosNominais"])):
                 for column in range(16):
                     table_retorno_consolidado.cell(
@@ -1707,18 +1705,16 @@ for client_name in clientes_on_off["name"].unique():
             else:
                 valores_liquidar.text_frame.paragraphs[0].runs[0].text = ""
 
-
             for i in range(len(total_onshore)-3):
                 table_total.cell(
                     0, i+1).text_frame.paragraphs[0].runs[0].text = round_if_numeric(total_onshore[i+2], 0, "R$ ")
             table_total.cell(0, 5).text_frame.paragraphs[0].runs[0].text = round_if_numeric(
                 total_onshore[6], 1, "%", False)
-
             for row in range(len(final_onshore["df_final_ResumoPorConta"])):
                 for column in range(6):
                     table_visao_custodiante.cell(
                         2+row, column).text = final_onshore["df_final_ResumoPorConta"].iloc[row, column+1]
-
+                    
                     if (row % 2):
                         # segundo
                         cell = table_visao_custodiante.cell(2+row, column)
@@ -1744,11 +1740,11 @@ for client_name in clientes_on_off["name"].unique():
                         cell = table_visao_custodiante.cell(2+row, column)
                         cell.text_frame.paragraphs[0].font.size = Pt(8)
                         cell.text_frame.paragraphs[0].font.bold = True
-
-            for _ in range(row+3, 10):
+                        
+            for _ in range(row+3, 9):
                 remove_row(table_visao_custodiante,
                             table_visao_custodiante.rows[row+3])
-
+                
             retorno_consolidado_height = (
                 (len(table_retorno_consolidado.rows)-2)/2)*Cm(1.4) + Cm(1.88)
             visao_custodiante_height = (
@@ -1769,7 +1765,7 @@ for client_name in clientes_on_off["name"].unique():
                 shape for shape in slide.shapes if shape.name == "alocacao_classe"][0].chart
             
             rentabilidade_classe= [shape for shape in slide.shapes if shape.name == "rentabilidade_classe"][0].table
-
+            
             perf_attr_fill(final_onshore["df_final_AlocacaoClasse"]["Classe"].to_list(
             ), final_onshore["df_final_PerfAttr"].copy(), slide)
 
@@ -1781,7 +1777,6 @@ for client_name in clientes_on_off["name"].unique():
                 final_onshore["df_final_AlocacaoClasse"]["% da Carteira"].values))
             # ---replace chart data---
             alocacao_classe.replace_data(chart_data)
-
             for row in range(len(cmd_onshore["df_ClasseDeAtivos"])):
                 for column in range(7):
                     rentabilidade_classe.cell(1+row, column).text_frame.paragraphs[0].runs[0].text = round_if_numeric(cmd_onshore["df_ClasseDeAtivos"].replace("nd","-").iloc[row,column],1,"%",False)
@@ -1789,7 +1784,7 @@ for client_name in clientes_on_off["name"].unique():
                 remove_row(rentabilidade_classe, rentabilidade_classe.rows[len(cmd_onshore["df_ClasseDeAtivos"])+1])
 
             # slide 17 - Historico e Resumo por Conta (offshore)
-
+            
             slide = prs.slides[37]  # Acessa o slide desejado
             table_retorno_consolidado = [
                 shape for shape in slide.shapes if shape.name == "retorno_consolidado"][0].table
@@ -1826,7 +1821,7 @@ for client_name in clientes_on_off["name"].unique():
             for _ in range(row+3, 22):
                 remove_row(table_retorno_consolidado,
                             table_retorno_consolidado.rows[row+3])
-
+            
             visao_custodiante = [
                 shape for shape in slide.shapes if shape.name == "visao_custodiante"][0]
             table_visao_custodiante = visao_custodiante.table
@@ -1874,7 +1869,7 @@ for client_name in clientes_on_off["name"].unique():
                         cell.text_frame.paragraphs[0].font.size = Pt(8)
                         cell.text_frame.paragraphs[0].font.bold = True
 
-            for _ in range(row+3, 10):
+            for _ in range(row+3, 9):
                 remove_row(table_visao_custodiante,
                             table_visao_custodiante.rows[row+3])
 
@@ -2598,7 +2593,8 @@ for client_name in clientes_onshore["name"].unique():
                 7, final_onshore["dfs_class"], 18)
             
             if not cmd_onshore["df_valores_liquidar"].empty:
-                slide = prs.slides[18]
+                
+                slide = prs.slides[21]
                 valores_liq = [shape for shape in slide.shapes if shape.name == "valores_liq"][0].table
                 
                 table_len = cmd_onshore["df_valores_liquidar"].shape[0]
@@ -2620,7 +2616,6 @@ for client_name in clientes_onshore["name"].unique():
                 
             else:
                 delete_slide(prs, 18)
-
             for slide_index in range(max_slide_onshore, 20):
                 delete_slide(prs, max_slide_onshore+1)
 

@@ -29,19 +29,19 @@ from pptx.enum.text import PP_ALIGN
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
-data_fim = datetime(2024, 8, 30)  # TODO MUDAR
+data_fim = datetime(2024, 9, 30)  # TODO MUDAR
 folder = "JUL24"  # TODO MUDAR
 username = "ekho.fo"
 password = "EKH@fo2024"
  
  
-portifolio_onshore = "3006"
-data_ini_onshore = "31052023"
+portifolio_onshore = "1010"
+data_ini_onshore = "22032024"
  
-portifolio_offshore = "3006"
-data_ini_offshore = "31052023"
+portifolio_offshore = "1001"
+data_ini_offshore = "01042024"
  
-client_name = "JOAO ARAUJO E NATASHA ARAUJO"
+client_name = "ANTONIO LUCIANO DE CAMARGO FILHO & MARCIA MIYUKI IOSHIHARA"
 
 
 # Azul Claro, Laranja, Azul Escuro, Cinza, Verde, Preto, Branco
@@ -578,7 +578,7 @@ def get_cmd_data(portifolio, region="onshore", data_ini="02012000"):
                     df_RetornosNominais.at[index, col] = value * 100
 
     json_e22 = CMD_request("ExtratoCarteira022", portifolio, data_inicio_carteira_str,
-                           data_fim_str, first_workday_str, "1", extra="%26cot_tir_ativo%3Dambos")
+                           data_fim_str, previous_month_last_workday_str, "1", extra="%26cot_tir_ativo%3Dambos")
     df_RetornoNominalAtivo = json_to_df(json_e22, "tab4")
     for i in range(len(df_RetornoNominalAtivo)):
         for j in range(len(df_RetornoNominalAtivo.iloc[i])):
@@ -611,7 +611,7 @@ def get_cmd_data(portifolio, region="onshore", data_ini="02012000"):
     
     
     json_e21l2_IF= CMD_request("ExtratoCarteira021", portifolio, data_inicio_carteira_str,
-                          data_fim_str, first_workday_str, "2", classe="IF")
+                          data_fim_str, previous_month_last_workday_str, "2", classe="IF")
     df_IF= json_to_df(json_e21l2_IF, "tab9")
     
     ativos_IF = split_dfs(df_IF,instituicao_financeira["instituicao_financeira"].tolist())

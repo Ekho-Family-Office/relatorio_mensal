@@ -2136,7 +2136,7 @@ for client_name in clientes_onshore["name"].unique():
                 valor_inicial = cmd_onshore["df_valores_liquidar"].sum()[2]
                 valor = cmd_onshore["df_valores_liquidar"].sum()[5]
                 df_final_valores_liquidar = pd.DataFrame(columns=final_onshore["df_final_ResumoPorConta"].columns)
-                df_final_valores_liquidar.loc[0] = ['', "Valores a Liquidar*",valor_inicial,valor-valor_inicial,0,valor,0]df_final_valores_liquidar.loc[0] = ['', "Valores a Liquidar*",valor_inicial,valor-valor_inicial,0,valor,0]
+                df_final_valores_liquidar.loc[0] = ['', "Valores a Liquidar*",valor_inicial,valor-valor_inicial,0,valor,0]
                 final_onshore["df_final_ResumoPorConta"] = pd.concat([final_onshore["df_final_ResumoPorConta"], df_final_valores_liquidar], ignore_index=True)
                 final_onshore["df_final_ResumoPorConta"]["%"] = (final_onshore["df_final_ResumoPorConta"].iloc[:,5]/final_onshore["df_final_ResumoPorConta"].iloc[:,5].sum())*100
                 

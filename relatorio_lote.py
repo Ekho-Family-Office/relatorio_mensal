@@ -29,8 +29,8 @@ import traceback
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
-data_fim = datetime(2024, 8, 30)  # TODO MUDAR
-folder = "JUL24"  # TODO MUDAR
+data_fim = datetime(2024, 9, 30)  # TODO MUDAR
+folder = "a"  # TODO MUDAR
 username = "ekho.fo"
 password = "EKH@fo2024"
 
@@ -983,6 +983,12 @@ for client_name in clientes_on_off["name"].unique():
             final_onshore["df_final_ResumoPorConta"] = cmd_onshore["df_ResumoPorConta"].copy(
             ).reset_index(drop=True)
             if not cmd_onshore["df_valores_liquidar"].empty:
+                for i in range(len(cmd_onshore["df_valores_liquidar"])):
+                    for j in range(len(cmd_onshore["df_valores_liquidar"].iloc[i])):
+                        if type(cmd_onshore["df_valores_liquidar"].iloc[i, j]) == str and "E-" in cmd_onshore["df_valores_liquidar"].iloc[i, j]:
+                            cmd_onshore["df_valores_liquidar"].iloc[i, j] = 0
+                        else:
+                            pass
                 valor_inicial = cmd_onshore["df_valores_liquidar"].sum()[2]
                 valor = cmd_onshore["df_valores_liquidar"].sum()[5]
                 df_final_valores_liquidar = pd.DataFrame(columns=final_onshore["df_final_ResumoPorConta"].columns)
@@ -2121,9 +2127,16 @@ for client_name in clientes_onshore["name"].unique():
             final_onshore["df_final_ResumoPorConta"] = cmd_onshore["df_ResumoPorConta"].copy(
             ).reset_index(drop=True)
             if not cmd_onshore["df_valores_liquidar"].empty:
+                for i in range(len(cmd_onshore["df_valores_liquidar"])):
+                    for j in range(len(cmd_onshore["df_valores_liquidar"].iloc[i])):
+                        if type(cmd_onshore["df_valores_liquidar"].iloc[i, j]) == str and "E-" in cmd_onshore["df_valores_liquidar"].iloc[i, j]:
+                            cmd_onshore["df_valores_liquidar"].iloc[i, j] = 0
+                        else:
+                            pass
+                valor_inicial = cmd_onshore["df_valores_liquidar"].sum()[2]
                 valor = cmd_onshore["df_valores_liquidar"].sum()[5]
                 df_final_valores_liquidar = pd.DataFrame(columns=final_onshore["df_final_ResumoPorConta"].columns)
-                df_final_valores_liquidar.loc[0] = ['', "Valores a Liquidar*",0,valor,0,valor,0]
+                df_final_valores_liquidar.loc[0] = ['', "Valores a Liquidar*",valor_inicial,valor-valor_inicial,0,valor,0]df_final_valores_liquidar.loc[0] = ['', "Valores a Liquidar*",valor_inicial,valor-valor_inicial,0,valor,0]
                 final_onshore["df_final_ResumoPorConta"] = pd.concat([final_onshore["df_final_ResumoPorConta"], df_final_valores_liquidar], ignore_index=True)
                 final_onshore["df_final_ResumoPorConta"]["%"] = (final_onshore["df_final_ResumoPorConta"].iloc[:,5]/final_onshore["df_final_ResumoPorConta"].iloc[:,5].sum())*100
                 

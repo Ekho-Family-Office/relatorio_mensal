@@ -30,18 +30,19 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
 data_fim = datetime(2024, 9, 30)  # TODO MUDAR
-folder = "JUL24"  # TODO MUDAR
+folder = "a"  # TODO MUDAR
 username = "ekho.fo"
 password = "EKH@fo2024"
+# username = "mb.asset"
+# password = "mb.asset"
+
+portifolio_onshore = "1116"
+data_ini_onshore = "28062024"
  
+portifolio_offshore = "1116"
+data_ini_offshore = "03042024"
  
-portifolio_onshore = "1010"
-data_ini_onshore = "22032024"
- 
-portifolio_offshore = "2037"
-data_ini_offshore = "05082024"
- 
-client_name = "ANTONIO LUCIANO DE CAMARGO FILHO & MARCIA MIYUKI IOSHIHARA"
+client_name = "MICHEL YANG XIAO"
 
 
 # Azul Claro, Laranja, Azul Escuro, Cinza, Verde, Preto, Branco
@@ -990,6 +991,13 @@ final_onshore["df_final_RetornosNominais"].iloc[:, 2:] = final_onshore["df_final
 final_onshore["df_final_ResumoPorConta"] = cmd_onshore["df_ResumoPorConta"].copy(
 ).reset_index(drop=True)
 if not cmd_onshore["df_valores_liquidar"].empty:
+    for i in range(len(cmd_onshore["df_valores_liquidar"])):
+        for j in range(len(cmd_onshore["df_valores_liquidar"].iloc[i])):
+            if type(cmd_onshore["df_valores_liquidar"].iloc[i, j]) == str and "E-" in cmd_onshore["df_valores_liquidar"].iloc[i, j]:
+                cmd_onshore["df_valores_liquidar"].iloc[i, j] = 0
+            else:
+                pass
+
     valor_inicial = cmd_onshore["df_valores_liquidar"].sum()[2]
     valor = cmd_onshore["df_valores_liquidar"].sum()[5]
     df_final_valores_liquidar = pd.DataFrame(columns=final_onshore["df_final_ResumoPorConta"].columns)
